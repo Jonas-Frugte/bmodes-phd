@@ -1,0 +1,119 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{jonasstyle}[2026/04/03 Clean modern LaTeX style]
+
+% --------------------------------------------------
+% Engine check (require XeLaTeX or LuaLaTeX)
+% --------------------------------------------------
+\RequirePackage{iftex}
+\ifPDFTeX
+  \PackageError{jonasstyle}{Use XeLaTeX or LuaLaTeX for this style}{}
+\fi
+
+% --------------------------------------------------
+% Modern fonts
+% --------------------------------------------------
+\RequirePackage{fontspec}
+\setmainfont{Source Sans Pro}[
+  Ligatures=TeX,
+  Scale=1.0
+]
+
+% Math font (clean + readable)
+\RequirePackage{unicode-math}
+\setmathfont{TeX Gyre Termes Math}
+
+% --------------------------------------------------
+% Page layout (smaller margins)
+% --------------------------------------------------
+\RequirePackage[a4paper,margin=2.6cm]{geometry}
+
+% --------------------------------------------------
+% Typography improvements
+% --------------------------------------------------
+\RequirePackage{microtype}
+
+% --------------------------------------------------
+% Math / graphics
+% --------------------------------------------------
+\RequirePackage{amsmath,amssymb,bm}
+\RequirePackage{graphicx}
+\RequirePackage{xcolor}
+
+% --------------------------------------------------
+% Paragraph style
+% --------------------------------------------------
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+
+% --------------------------------------------------
+% Section titles
+% --------------------------------------------------
+\RequirePackage{titlesec}
+
+\titleformat{\section}
+  {\Large\bfseries}
+  {\thesection}{0.75em}{}
+
+\titleformat{\subsection}
+  {\large\bfseries}
+  {\thesubsection}{0.6em}{}
+
+\titleformat{\subsubsection}
+  {\normalsize\bfseries}
+  {\thesubsubsection}{0.5em}{}
+
+\titlespacing*{\section}{0pt}{1.4em}{0.6em}
+\titlespacing*{\subsection}{0pt}{1.0em}{0.4em}
+\titlespacing*{\subsubsection}{0pt}{0.8em}{0.3em}
+
+% --------------------------------------------------
+% Title styling (bold, clean)
+% --------------------------------------------------
+\RequirePackage{titling}
+
+\pretitle{\begin{center}\LARGE\bfseries}
+\posttitle{\par\end{center}\vspace{0.5em}}
+
+\preauthor{\begin{center}\normalsize}
+\postauthor{\par\end{center}\vspace{0.25em}}
+
+\predate{\begin{center}\small}
+\postdate{\par\end{center}\vspace{1em}}
+
+% --------------------------------------------------
+% Captions
+% --------------------------------------------------
+\RequirePackage[font=small,labelfont=bf]{caption}
+
+% --------------------------------------------------
+% Lists
+% --------------------------------------------------
+\RequirePackage{enumitem}
+\setlist{itemsep=0.25em, topsep=0.4em}
+
+% --------------------------------------------------
+% Hyperlinks
+% --------------------------------------------------
+\definecolor{linkcol}{RGB}{25,75,135}
+\RequirePackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=linkcol,
+    citecolor=linkcol,
+    urlcolor=linkcol,
+    pdfborder={0 0 0}
+}
+
+% --------------------------------------------------
+% Header / footer
+% --------------------------------------------------
+\RequirePackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+% --------------------------------------------------
+% Slightly improved line spacing
+% --------------------------------------------------
+\linespread{1.03}

@@ -1,6 +1,7 @@
 \documentclass[11pt]{article}
 
-\usepackage{jcappub}
+%\usepackage{jcappub}
+\usepackage{style}
 
 \usepackage[utf8]{inputenc}   % Allows UTF-8 character encoding
 \usepackage{amsmath}          % For advanced math typesetting
@@ -8,7 +9,6 @@
 \usepackage{graphicx}         % For including images
 \usepackage{hyperref}         % For hyperlinks in the document
 \usepackage{geometry}         % For setting up page geometry
-\geometry{margin=1in}         % 1-inch margins all around
 \usepackage{siunitx}          % For consistent typesetting of units
 \usepackage{float}            % To control float positioning (e.g., figures/tables)
 \usepackage{enumitem}         % Better control over list formatting
@@ -56,67 +56,62 @@
 \setlength{\parskip}{1em}     % Add space between paragraphs
 \title{Intrinsic Alignment in Cosmology}
 
-\author[1]{Jonas Frugte}
-
-\affiliation[1]{Van Swinderen Institute for Particle Physics and Gravity, University of Groningen, Nijenborgh 4, 9747 AG Groningen, The Netherlands}
-
-\emailAdd{jonasfrugte@gmail.com}
-\abstract{
-A brief literature review of intrinsic alignment (IA) in cosmology.
-}
+\author{Jonas Frugte}
 
 
 \begin{document}
 
 \maketitle
 
-\section*{Abbreviations Used}
-\begin{itemize}
-    \item[]EFT: effective field theory
-    \item[]BPs: bias parameters
-    \item[]IA: intrinsic alignment
-    \item[]LIMD: linear in matter density
-    \item[]SC gauge: synchronous-comoving gauge
-    \item[]SPT: standard perturbation theory
-\end{itemize}
+\tableofcontents
 
-\section*{Symbols Used}
-\small
-\begin{itemize}
-    \item[]$a$: scale factor
-    \item[]$z,\ \bar z,\ \tilde z$: redshift (background, observed)
-    \item[]$\eta$: conformal time
-    \item[]$\mathcal H$: conformal Hubble parameter ($\mathcal H=aH$)
-    \item[]$\Omega_m$: matter density parameter
-    \item[]$D(z)$: linear growth factor,\quad $f \equiv \d\ln D/\d\ln a$
-    \item[]$\mathbf x,\ \mathbf q$: Eulerian, Lagrangian position
-    \item[]$\mathbf v,\ \theta$: peculiar velocity, velocity divergence ($\theta=\partial_i v^i$)
-    \item[]$s^i$: Lagrangian displacement
-    \item[]$\chi,\ \tilde\chi$: comoving radial distance (true, observed)
-    \item[]$\hat{\mathbf n}$: line-of-sight unit vector
-    \item[]$P^{ij}$: sky projector ($P^{ij}=\delta^{ij}-\hat n^i\hat n^j$)
-    \item[]$\partial_\parallel,\ \partial_{\perp i}$: derivatives along / transverse to $\hat{\mathbf n}$
-    \item[]$\Phi$: Newtonian gravitational potential
-    \item[]$\delta_m$: matter density contrast
-    \item[]$\delta_g,\ \delta_h$: galaxy, halo density contrast
-    \item[]$K_{ij}$: tidal tensor $K_{ij}\equiv \partial_i\partial_j\nabla^{-2}\delta_m-\tfrac13\delta_{ij}\delta_m$
-    \item[]$\Pi^{[n]}_{ij}$: convective-time-derivative operator hierarchy (EFT basis)
-    \item[]$b_{\mathcal O}$: bias / IA coefficients for operator $\mathcal O$
-    \item[]$\Rstar$: non-locality scale (higher-derivative suppression scale)
-    \item[]$Q_{ij}$: 3D shape (symmetric, trace-free) tensor of a galaxy
-    \item[]$\gamma_{ij}$: projected (spin-2) shear on the sky
-    \item[]$\gamma^{I}_{ij}$: intrinsic shear (IA) contribution
-    \item[]$\kappa$: lensing convergence,\quad $\hat \kappa$ for observed estimator
-    \item[]$\Delta x^\mu$: mapping between true and observed source position
-    \item[]$\delta z$: perturbation to observed redshift
-    \item[]$n_g,\ \bar n_g,\ \tilde n_g$: proper, background, observed galaxy number density
-    \item[]$\epsilon,\ \epsilon_{ij}$: IA stochastic (scalar / tensor) noise fields
-    \item[]$\varepsilon_{\mu\nu\rho\sigma}$: Levi-Civita tensor
-    \item[]$\langle\cdots\rangle$: ensemble average; prime (${}'$) means Dirac delta removed
-    \item[]$\deltaD$: Dirac delta function
-    \item[]$P^{(m)}_{\ell\ell'}(k)$: helicity power spectra of spin-2 components
-  \end{itemize}
-  \normalsize
+% \section*{Abbreviations Used}
+% \begin{itemize}
+%     \item[]EFT: effective field theory
+%     \item[]BPs: bias parameters
+%     \item[]IA: intrinsic alignment
+%     \item[]LIMD: linear in matter density
+%     \item[]SC gauge: synchronous-comoving gauge
+%     \item[]SPT: standard perturbation theory
+% \end{itemize}
+
+% \section*{Symbols Used}
+% \small
+% \begin{itemize}
+%     \item[]$a$: scale factor
+%     \item[]$z,\ \bar z,\ \tilde z$: redshift (background, observed)
+%     \item[]$\eta$: conformal time
+%     \item[]$\mathcal H$: conformal Hubble parameter ($\mathcal H=aH$)
+%     \item[]$\Omega_m$: matter density parameter
+%     \item[]$D(z)$: linear growth factor,\quad $f \equiv \d\ln D/\d\ln a$
+%     \item[]$\mathbf x,\ \mathbf q$: Eulerian, Lagrangian position
+%     \item[]$\mathbf v,\ \theta$: peculiar velocity, velocity divergence ($\theta=\partial_i v^i$)
+%     \item[]$s^i$: Lagrangian displacement
+%     \item[]$\chi,\ \tilde\chi$: comoving radial distance (true, observed)
+%     \item[]$\hat{\mathbf n}$: line-of-sight unit vector
+%     \item[]$P^{ij}$: sky projector ($P^{ij}=\delta^{ij}-\hat n^i\hat n^j$)
+%     \item[]$\partial_\parallel,\ \partial_{\perp i}$: derivatives along / transverse to $\hat{\mathbf n}$
+%     \item[]$\Phi$: Newtonian gravitational potential
+%     \item[]$\delta_m$: matter density contrast
+%     \item[]$\delta_g,\ \delta_h$: galaxy, halo density contrast
+%     \item[]$K_{ij}$: tidal tensor $K_{ij}\equiv \partial_i\partial_j\nabla^{-2}\delta_m-\tfrac13\delta_{ij}\delta_m$
+%     \item[]$\Pi^{[n]}_{ij}$: convective-time-derivative operator hierarchy (EFT basis)
+%     \item[]$b_{\mathcal O}$: bias / IA coefficients for operator $\mathcal O$
+%     \item[]$\Rstar$: non-locality scale (higher-derivative suppression scale)
+%     \item[]$Q_{ij}$: 3D shape (symmetric, trace-free) tensor of a galaxy
+%     \item[]$\gamma_{ij}$: projected (spin-2) shear on the sky
+%     \item[]$\gamma^{I}_{ij}$: intrinsic shear (IA) contribution
+%     \item[]$\kappa$: lensing convergence,\quad $\hat \kappa$ for observed estimator
+%     \item[]$\Delta x^\mu$: mapping between true and observed source position
+%     \item[]$\delta z$: perturbation to observed redshift
+%     \item[]$n_g,\ \bar n_g,\ \tilde n_g$: proper, background, observed galaxy number density
+%     \item[]$\epsilon,\ \epsilon_{ij}$: IA stochastic (scalar / tensor) noise fields
+%     \item[]$\varepsilon_{\mu\nu\rho\sigma}$: Levi-Civita tensor
+%     \item[]$\langle\cdots\rangle$: ensemble average; prime (${}'$) means Dirac delta removed
+%     \item[]$\deltaD$: Dirac delta function
+%     \item[]$P^{(m)}_{\ell\ell'}(k)$: helicity power spectra of spin-2 components
+%   \end{itemize}
+%  \normalsize
   
 
 \section{Introduction and Motivation}
@@ -435,7 +430,7 @@ and the last term corresponds to the noise spectra (see subsection \ref{sec:nois
 % TODO: the rest of the section
 
 \section{Lensing corrections to observed galaxy density}
-Based on \cite{Schmidt2013_clustering}. Unlensed photon geodesic through the centre ($x^\mu = 0$) given by
+\textit{These are corrections to the $g$ signal without flux/size cutoffs} Based on \cite{Schmidt2013_clustering}. Unlensed photon geodesic through the centre ($x^\mu = 0$) given by
 $$
 x^\mu(\chi) = (\eta_0-\chi, \hat{\mathbf n}\chi), \quad \chi \text{ affine parameter.}
 $$
@@ -462,6 +457,7 @@ The observed number of galaxies in a volume $\tilde V$ defined in terms of the o
     &= \int_{\tilde V} \sqrt{-g} n_g u^\mu \epsilon_{\mu\alpha\beta\gamma} \frac{\partial x^\alpha}{\partial \tilde x^1}\frac{\partial x^\beta}{\partial \tilde x^2}\frac{\partial x^\gamma}{\partial \tilde x^3} d\tilde x^1 d\tilde x^2 d\tilde x^3
 \end{align}
 where $J^\mu = \sqrt{-g} n_g u^\mu$ is the galaxy number 4-current density, $\tilde V$ is a hypersurface in 4-space, i.e. a volume in 3-space, and $d\tilde V_\mu$ is the normal vector of $\tilde V$ with area $\d \tilde V$. It is mathematically as
+% TODO: fix the braces
 \begin{equation}
     \d \tilde V_\mu = \underbrace{\epsilon_{\mu 123} dx^1dx^2dx^3}_{\text{in true coordinates}} = \underbrace{\epsilon_{\mu \alpha\beta\gamma} \frac{\partial x^\alpha}{\partial \tilde x^1}\frac{\partial x^\beta}{\partial \tilde x^2}\frac{\partial x^\gamma}{\partial \tilde x^3} d\tilde x^1 d\tilde x^2 d\tilde x^3}_{\text{in observed coordinates}}.
 \end{equation} 
@@ -507,6 +503,70 @@ Now what is the significance of these corrections? If you take the fourier trans
 \end{equation}
 The effect corresponds to a $f_{NL}$ of order $1$. These corrections are thus only relevant for extremely large volume surveys, such as Euclid.
 
+\section{Galaxy shape $B$-modes, theoretical model}
+
+\subsection{$B$-modes due to intrinsic alignment}
+
+
+\subsection{Lensing corrections (post-Born)}
+
+
+\subsection{$B$-modes due to galaxy clustering}
+From \cite{Schneider_2002}. In the presence of a galaxy correlation function $\delta_{\mathrm D}(z_1-z_2)g(z_1;\theta_1)$ ($\theta = |\vec\theta_1-\vec\theta_2|$) we get a modified source redshift distribution of pairs of galaxies at redshifts $z_1$ and $z_2$, i.e.
+\begin{equation*}
+    p(z_1, z_2;\theta) = \frac{p(w_1;\theta)p(w_2;\theta)[1+\delta_{\mathrm D}(w_1-w_2)g(w_1;\theta)]}{1+\omega(\theta)},
+\end{equation*}
+where
+\begin{equation*}
+    \omega(\theta) = \int_0^\infty\mathrm d z \; p(z;\theta)^2g(z;\theta).
+\end{equation*}
+
+Defining ratio of distance to source and distance from redshift $z$ to source as
+\begin{equation*}
+    R(z,z_s)=\frac{\chi(z_s)-\chi(z)}{\chi(z_s)},
+\end{equation*}
+one can obtain the following equation in configuration space (eq 49 of \cite{Schneider_2002})
+\begin{equation*}
+    \xi_\pm = \left ( \frac{3H_0^2\Omega_0}{2c^2} \right )^2\int_0^\infty \frac{\mathrm d z}{a^2(z)}\int\frac{\mathrm d \ell \; \ell}{2\pi}P_\delta\left ( \frac{\ell}{\chi(z)},z \right ) J_{0,4}(\ell \theta)\langle R(z, z_1)R(z,z_2) \rangle.
+\end{equation*}
+
+The $R(\cdot, \cdot)$ correlation is then modified due to galaxy clustering as
+\begin{equation*}
+    \langle R(z, z_1)R(z,z_2) \rangle = \frac{W^2(z)+V(z,\theta)}{1+\omega(\theta)},
+\end{equation*}
+where
+\begin{align*}
+    W(z) &= \int_z^\infty \mathrm z_1 \; p(z_1)\frac{\chi(z_1)-\chi(z)}{\chi(z_1)} \\
+    V(w, \theta) &= \int_z^\infty \mathrm d z_1 \; p^2(z_1) \left ( \frac{\chi(z_1)-\chi(z)}{\chi(z_1)} \right )^2 g(z_1; \theta)
+\end{align*}
+Clustering thus introduces $V(\cdot,\cdot)$, which leads to $B$-modes (and corrections to $E$-modes).
+
+To get the $B$-modes, first define
+\begin{align*}
+    P_{\kappa}(\ell) &= \left ( \frac{3H_0^2\Omega_0}{2c^2} \right )^2 \int_0^\infty \frac{\mathrm d z}{a^2(z)} W^2(z)P_\delta \left (\frac{\ell}{\chi(z)}, z \right ) ,\\
+    P_{c}(\ell, \theta) &= \left ( \frac{3H_0^2\Omega_0}{2c^2} \right )^2 \int_0^\infty \frac{\mathrm d z}{a^2(z)} V(z, \theta)P_\delta \left (\frac{\ell}{\chi(z)}, z \right ).
+\end{align*}
+Then define
+\begin{equation*}
+    \mathcal P(\ell, \theta)= \frac{P_c(\ell,\theta) - w(\theta)P_{\kappa}(\ell)}{1+\omega(\theta)}.
+\end{equation*}
+One then obtains (eq 60 from \cite{Schneider_2002}) 
+\begin{equation*}
+    P_B(\ell)=\frac{1}{2}\int\mathrm d \theta\;\theta \int \mathrm d \ell' \; \ell' \mathcal P(\ell'; \theta)[J_0(\ell\theta)J_0(\ell'\theta)\pm J_4(\ell\theta)J_4(\ell'\theta)].
+\end{equation*}
+
+\subsection{$B$-modes due to flux / size cutoffs and lensing}
+(TODO: Check \cite{Bartelmann_2001}, also check Schmidt et al. 2008; Hui et al. 2007 as cited in \cite{Krause_2010} for effects on bispectrum/3-point.) Galaxies are selected based on brightness and size cutoffs. This leads to magnification bias and size bias. This gives B-mode correction. See eq. 60 of \cite{Krause_2010}. On scales $\ell>50$ lensing bias effectively increases the B-mode power spectrum by approximately a factor $(1 + 2q)$, where $q$ is determined by the slope of the luminosity and radius distribution functions of the galaxy sample.
+
+If we work with a flux and size cutoff and define \cite{Schmidt_2009}
+\begin{equation*}
+    q=-2\frac{\partial \ln n_{\text{obs}}}{\partial \ln f}|_{r_{\min}, f_{\min}} - \frac{\partial \ln n_{\text{obs}}}{\partial \ln r}|_{r_{\min}, f_{\min}} - 2,
+\end{equation*} then (at 2nd order in lensing)
+\begin{equation*}
+    1+\delta_{\text{lens}} = \frac{1+q\kappa^2 + C_1\kappa^2+C_2|\gamma|^2}{1+C_1\langle \kappa^2\rangle + C_2\langle |\gamma|^2\rangle}.
+\end{equation*}
+The measured reduced shear $g_{\text{obs}}$ is given in terms of the actual reduced shear $g$, through $g_{\text{obs}}=g(1+\delta_{\text{lens}})$. This corrected value is then correlated to obtain B-modes.
+
 \section{Calibration and Validation with Simulations}
 TODO here:
 \begin{enumerate}
@@ -516,5 +576,121 @@ TODO here:
 
 
 \printbibliography
+
+\appendix
+
+\section{Simulating/modelling nonlinear structure formation and baryonic feedback with HMCODE}
+\subsection{The halo model}
+In order to accurately model the matter power spectrum at nonlinear scales, the halo model has been proposed since the early 2000's (TODO: ESSENTIAL REFERENCES HERE). One assumes that all matter is located in exactly one halo. First rewrite the matter density field in the dimensionless quantity $\Delta^2$:
+\begin{equation}
+    \Delta^2(k) = 4\pi V\br{\frac{k}{2
+    \pi}}P(k),
+\end{equation}
+which gives the fractional contribution to the variance per logarithmic interval in $k$.
+In the halo model, the power spectrum can be split into correlations between points within the same halo and between points within different halos. This gives the 1 and 2 halo terms, respectively.
+\begin{equation}
+    \Delta^2(k)=\Delta^2_{2H}+\Delta^2_{1H}.
+\end{equation}
+The 1 halo term is given as
+\begin{equation}
+    \Delta^2_{1H}(k) = 4\pi\br{\frac{k}{2\pi}}^3\frac{1}{\bar\rho^2}\int_{0}^\infty M^2 W^2(k, M)F(M)\d M.
+\end{equation}
+The following definitions are in order:
+\begin{enumerate}
+    \item $F(M)$ is the halo mass function, it is defined so that $F(M)\d M$ is the comoving number density of halos with mass between $M$ and $M + \d M$.
+    \item $W(k, M)$ is the normalized Fourier transform of the halo density profile, $\rho_{halo}(r, M)$, which is assumed to be spherically symmetric:
+    \begin{equation}
+        W(k,M) = \mathcal F[\frac{1}{M}\rho_{halo}(r,M)](k) = \frac{1}{M}\int_0^{r_v}\frac{\sin(kr)}{kr}4\pi r^2\rho_{halo}(r, M) \d r.
+    \end{equation}
+    \item $r_v$ is the virial radius, defined such that the average density within a distance $r_v$ from the center of the halo is $\Delta_v \bar\rho$, where $\Delta_v$ is chosen by the author and is usually around 200.
+\end{enumerate}
+TODO: 2 halo spectrum def?
+
+To get the halo model to work we then need to choose an accurate halo density profile. A common one is the NFW profile \cite{Navarro_1997},
+\begin{equation}
+    \rho_{NFW}(r) = \frac{\rho_N}{(r/r_s)(1+r/r_s)^2},
+\end{equation}
+where $r_s$ is the scale that roughly separates the core of the halo from the outer portion and $\rho_N$ is a normalization constant. The other choice that needs to be made is for the halo number density. It has been shown to have a near univeral form (TODO: SOME REFS). First define
+\begin{equation}
+    v \equiv \frac{\delta_c}{\sigma(M)},
+\end{equation}
+where $\sigma(M)$ is the variance of the mass density smoothed on the comoving scale $r_v$ corresponding to a halo of mass $M$ and $\delta_c$ at some redshift $z$ is defined through the linear growth function and deviation function $\sigma$.
+
+Now define $f(v)$ so that it relates to $F(v)$ as 
+\begin{equation}
+    \frac{M}{\bar \rho}F(M)\d M = f(v) \d v.
+\end{equation}
+$f$ then has a nearly universal which was first derived in \cite{1974ApJ...187..425P} and improved upon in \cite{Sheth_1999} to better fit simulations. It is given as
+\begin{equation}
+    f(v) = A_f\sbr{1+\frac{1}{(av^2)^p}}e^{-av^2/2}, \quad a = 0.707, \quad p = 0.3.
+\end{equation}
+It is accurate up to about 20 percent for a wide range of cosmologies.
+
+\subsection{Baryonic feedback}
+Baryonic feedback refers to effects unique to baryons due to their collisional and warm nature. Important effects include cooling, supernova explosions, and active galactic nuclei (AGN). (TODO: ADD BASIC REFS)
+\begin{enumerate}
+    \item Baryonic matter has inelastic collisions. Kinetic energy is lost and converted mainly into heat, which is then converted into radiative energy. This causes baryonic matter to clump up more than CDM, in turn leading to the creation of macroscopic structures such as stars and planets, as well as to denser halo cores than expected from a CDM only universe.
+    \item Active galactic nuclei means a galaxy with an active ("feeding") supermassive black hole at its center. Matter is sucked into accretion disks, where it is heated up. This releases a large amount of energy in the form of radiation and jets (relativistic plasma) back into the halo, thereby expanding ("bloating") it. AGN feedback can reduce the baryon fraction in the centres of haloes by a factor of 2 in the most extreme models \cite{Duffy_2010}.
+    \item Supernova explosions have essentially the same effect on halo structure. Energy is released into the halo in the form of radiation, heating up the halo and bloating it.
+\end{enumerate}
+Constraints from the Dark Energy Survey could be strongly biased if the most extreme feedback scenarious apply and constraints from Euclid would be severely biased for any feasible feedback scenario. The halo model is particularly good at taking into account baryonic feedback, as its main effect is to change halo shape, which we can easily change when using this model, \cite{Duffy_2010, Semboloni_2011, mohammed2014baryoniceffectsweaklensingtwopoint}.
+
+
+
+
+\subsection{Optimizing the halo model and taking into account baryonic feedback}
+The halo model has been significantly improved upon by adding degrees of freedom and fitting to simulations in \cite{Mead_2016} and later with improved accuracy in \cite{Mead_2021}. In particular, they take into account BAO damping, massive neutrinos and baryonic feedback. The key changes made are:
+\begin{enumerate}
+    \item For the 2 halo term, they use ``de-wiggled'' linear theory. The BAO ``wiggles'' are isolated from the rest of the power spectrum signal,
+    \begin{equation}
+        P^{lin}(k,z) = P_{smt}(k,z) + P_{wig}(k,z)
+    \end{equation}
+    then the de-wiggled linear power spectrum has the BAO wiggles damped at small scales by removing part of that contribution as follows:
+    \begin{equation}
+        P_{dwl}(k,z) = P^{lin}(k,z) - (1-e^{-k^2\sigma_{v}(z)})P_{wig}(k,z).
+    \end{equation}
+    This damping models the BAO damping that occurs due to non-linear evolution. 2 halo term is then given in terms of this de-wiggled power spectrum. The full 2 halo equation (TODO: REF THE EQ ONCE I WRITE IT DOWN) would likely be more accurate but is significantly more costly to compute due to it containing an integral.
+    \item In order to obtain an accurate approximation of the 2 halo term, further damping of the power spectrum as a whole is required on smaller scales. Nonlinear collapse transfers power from large and intermediate scales into very small scales, causing a slight  suppression at $k\sim 0.03, z=0$ and an enhancement at high $k$. This suppression is modeled as
+    \begin{equation}
+        P^{2H}(k,z) = P_{dwl}(k,z)\sbr{1-f\frac{(k/k_d)^{n_d}}{1+(k/k_d)^{n_d}}},
+    \end{equation}
+    where $f$, $n_d$, and $k_d$ are free parameters.
+    \item On large scales the 1 halo term is too large and actually outgrows the linear / 2 halo term. This is because halos are assumed to be randomly distributed over space, which leads to a poisson noise contribution. In reality, they are much more uniformly distributed and are not allowed to overlap with one another due to how the halo model is constructed. Damping factor at large scales is thus required to compensate for this deficiency. This is done as
+    \begin{equation}
+        P^{1H}(k,z)\rightarrow P^{1H}(k,z) \frac{(k/k_*)^4}{1+(k/k_*)^4},
+    \end{equation}
+    where $k_*$ is another free parameter.
+    \item To take into account halo bloating, e.g. from baryonic feedback, the halo mass distribution is modified in a mass dependent way as
+    \begin{equation}
+        \rho (r, M) \propto \frac{1}{r/(v^\eta r_s)\sbr{1+r/(v^\eta r_s)}^2}.
+    \end{equation}
+    $\eta$ is now another free parameter. For $\eta>0$ this modification bloats heavy halos and concentrates light halos. Mathematically, the change corresponds to $W(k, M) \rightarrow W(v^{\eta}k, z)$.
+\end{enumerate}
+(Next are some changes made specifically to take into account baryonic feedback.)
+\begin{enumerate}
+    \setcounter{enumi}{4}
+    \item A delta function of magnitude $f_*$ is placed at the center of halos to model the presence of mass in the form of stars near its center. This was shown to be necesary to accurately calculate the MPS in multiple works. %TODO: ref fedeli 2014, Debackere et al 2020, Mead et al 2020
+    \item The ratio of virial radius, $r_v$, and $r_s$ is defined as the function $c\equiv r_v/r_s$. By choosing $c$ we thus choose $r_s$. $c$ is chosen in line with \cite{Bullock_2001}, which found
+    \begin{equation}
+        c(M,z) \approx B\sbr{\frac{1+z_f(M,z)}{1+z}},
+    \end{equation}
+    where $z_f$ is the ``formation redshift'' related to the linear growth function and matter field variance at relevant scales. $B$ is left as a free parameter (instead of the default $B=4$) to model gas expulsion lowering halo mass concentration.
+    \item Gas expulsion is further taken into account by lowering the gas content of halos via
+    \begin{equation}
+        f_g(M)=\br{\frac{\Omega_b}{\Omega_m}-f_*}\frac{(M/M_b)^\beta}{1+(M/M_b)^\beta},
+    \end{equation}
+    where $f_g$ is the halo gas fraction, $\frac{\Omega_b}{\Omega_m}-f_*$ is the available gas reservoir, and $M_b, \beta > 0$ are fitted parameters. Massive halos are unaffected while lighter halos are modeled to have lost significant amounts of gas.
+    The NFW window function is then replaced by
+    \begin{equation}
+        \tilde W(M,k) = \sbr{\frac{\Omega_c}{\omega_m}+f_g(M)}W(M,k) + f_* \frac{M}{\bar \rho}.
+    \end{equation}
+    %TODO: I did ignore eq 22 from the HMCODE-2020 paper about taking into account dark energy.
+\end{enumerate}
+In \cite{Mead_2021} it was observed that when fitting the power spectrum to the BAHAMAS simulations %TODO: add some ref here
+that all 6 baryonic feedback parameters are have a roughly linear relationship to the ``feedback temperature'', $\log_{10}(T_{AGN}/K)$. This is the temperature at which surrounding gas is heated by AGN. This is thus a much simpler model with only slightly less accuracy (couple of percent accuracy compared to $<2.5\%$ accuracy for the 6 parameter model).
+
+
+
+
 
 \end{document}

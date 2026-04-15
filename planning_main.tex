@@ -1,0 +1,89 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{style}
+\usepackage[backend=biber, style=numeric, sorting=none]{biblatex}
+
+\addbibresource{sources.bib}
+
+
+\title{B Modes detection - plan}
+\author{Jonas Frugte}
+
+\begin{document}
+
+\maketitle
+
+\section*{Goals and theoretical background}
+\begin{enumerate}
+    \item Create a plot of measured $C^{BB}$, $C^{gB}$, $C^{EB}$ from FLAMINGO or other sims. SOAP! Ask mathieau schaller for login link / access. {\color{magenta} EC: Depending on the size of the sim, you will be able to trust this to larger or smaller scales. Also, you will or will not get gB and EB depending on what you are computing from the sims. You talk about Cells here - how you are going to compute them? Do you think you'll be using the FLAMINGO lightcone or the box?}
+    
+    \item Plot SNR ($\chi^2$) of simulated $C^{BB}$ vs $\ell_{\text{max}}$. This tells us if we should even expect to see something significant. (for only shape noise) Define exactly how the shape noise will look like. {\color{magenta}: this isn't difficult, it just depends on the effective number of sources of the survey in different years. I have these numbers somewhere. More difficult: introducing a mask. I don't think we need to do that in a first project but worth considering because it can cause leakage of E to B.} Discuss with Casper if we should do something jacknife like for shape noise or if poisson noise is okay. NEW: Poisson noise is fine for a first calculation, only do better if we get detectable signal.{\color{magenta} if you are measuring these observables in the sim, you likely need jackknife or a theoretical covariance (better but difficult). Once you have a model and make a fit to the sims, you can then turn it into a forecast with a different covariance, the theoretical covariance of the survey (not the sim).}
+    
+    \item Create a model for extra uncertainty in B-mode power spectra. This will take into account:
+    {\color{gray} TODO: read KIDS appendix on B mode ``detection''.}
+    \begin{enumerate}
+        \item Shape noise.
+        \item Atmospheric effects
+        \item Cosmic rays (EB mode leakage?)
+        \item Masks
+
+        {\color{gray}
+        Stitching together parts of the sky and removing parts introduces B-modes. TODO: read about why/how. TODO: check if cosmic rays get completely masked out. Maybe ask Henk?
+        }
+        \item non-uniform survey depth
+        
+        \item Any other systematics that can't be mitigated? (Ask postdoc)
+    \end{enumerate}
+    understand what causes the most noise / leakage. {\color{magenta}: Nice. This is better accomplished using image simulations. Each survey has simulation teams that work on producing something realistic. In Euclid I think there are efforts already. In LSST they are starting.}
+
+    \item Look at uncertainty in $C^{IB}$ and $C^{EB}$ and answer the question: what level of ``detection'' of these spectra points to parity violation or unmodeled systematics. {\color{magenta} Agree!}
+    
+    \item Create a model taking into account B-mode causing effects. This will take into account. Pay particular attention to sign of effects. Many small effects adding up could lead to something significant: {\color{magenta} This is super nice but too ambitious for a first project. I think we will be slowly building up towards this.}
+    \begin{enumerate}
+        \item IA B modes
+            \begin{enumerate}
+                \item higher order terms
+                \item stochastic terms
+            \end{enumerate}
+        \item Clustering of galaxies, see \cite{Schneider_2002}
+        \item Order $\Phi^4$ corrections to lensing. This takes into account reduced shear as well.
+        
+        {\color{gray}
+        See table 2 in \cite{Krause_2010}. B mode power spectrum due to these effects is about 4 orders of magnitude smaller than E mode power spectrum. If we define ellipticity as
+        \begin{equation*}
+            \varepsilon = \frac{1-r}{1+r}e^{2i\phi},
+        \end{equation*}
+        with $r$ the ratio of major to minor axis and $\phi$ the angle of the major axis, then the reduced shear, $\gamma_r$, is related to the intrinsic ellipticity, $\varepsilon_I$, and observed ellipticity as
+        \begin{equation*}
+            \varepsilon = \frac{\varepsilon_I + \gamma_r}{1+\varepsilon_I\gamma_r^*}.
+        \end{equation*}}
+        
+        The $\Phi^4$ effects are given by:
+        \begin{enumerate}
+            \item multiple deflections (is this post born?) (causes B modes for sure)
+            \item non-linear conversion of reduced shear to mean ellipticity
+        \end{enumerate}
+        \item Clarify change of \textit{observed} galaxy density due to magnification? 
+    \end{enumerate}
+
+    \item Plot our best fit theoretical $C^{BB}$ vs simulated $C^{BB}$ and see where model breaks down. Maybe EFT of IA works for much smaller scales within the noise levels we expect? Plot some sort of $\chi^2$ of theoretical minus model vs $\ell_{\text{max}}$. Answer the question: at what scales does our model break down and what causes it to break down?
+
+    \item Explain significant B-modes on large scales? (from euclid) (possibly due to masking) (see \cite{Kitching2019}). Look at possibility of using psf B-modes to mitigate galaxy B-modes. (see \cite{2025OJAp....8E.139J} and \cite{2004MNRAS.347.1337H})
+\end{enumerate}
+
+\section*{Modeling Choices}
+Ask EUCLID people for galaxy distribution, number density, tomography, redshift uncertainty, (what else?).
+
+\section*{Planning}
+\begin{itemize}
+    \item Read through Casper's paper in more detail.
+    \item Read about point 4, add as much as possible.
+    \item (10 April) meeting with Casper and Thomas about FLAMINGO, three point, B modes. (to be confirmed)
+\end{itemize}
+
+\printbibliography
+
+\end{document}
