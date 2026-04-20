@@ -1,4 +1,4 @@
-\documentclass[11pt]{article}
+\documentclass[11pt]{book}
 
 %\usepackage{jcappub}
 \usepackage{style}
@@ -20,7 +20,7 @@
 \usepackage{booktabs}
 \usepackage{multirow} % needed for merging cells vertically
 \usepackage{booktabs}
-\usepackage[table]{xcolor}
+\usepackage{xcolor}
 
 
 \usepackage{listings}
@@ -38,8 +38,11 @@
 % some custom commands that should've already been in latex by default
 \DeclareRobustCommand{\d}{\ifmmode\text{d}\else d\fi}
 \DeclareRobustCommand{\Cov}{\ifmmode\text{Cov}\else d\fi}
+\DeclareRobustCommand{\PSF}{\ifmmode\text{PSF}\else d\fi}
 \DeclareRobustCommand{\CMB}{\ifmmode\text{CMB}\else d\fi}
 \DeclareRobustCommand{\gal}{\ifmmode\text{gal}\else d\fi}
+\DeclareRobustCommand{\obs}{\ifmmode\text{obs}\else d\fi}
+\DeclareRobustCommand{\intr}{\ifmmode\text{intr.}\else d\fi}
 \DeclareRobustCommand{\tr}{\ifmmode\text{tr}\else d\fi}
 \DeclareRobustCommand{\tf}{\ifmmode\text{tf}\else d\fi}
 
@@ -54,7 +57,7 @@
 % Additional customizations (optional)
 \setlength{\parindent}{0pt}   % No paragraph indentation
 \setlength{\parskip}{1em}     % Add space between paragraphs
-\title{Intrinsic Alignment in Cosmology}
+\title{Galaxy B Modes}
 
 \author{Jonas Frugte}
 
@@ -63,60 +66,13 @@
 
 \maketitle
 
+\setcounter{tocdepth}{1}
 \tableofcontents
 
-% \section*{Abbreviations Used}
-% \begin{itemize}
-%     \item[]EFT: effective field theory
-%     \item[]BPs: bias parameters
-%     \item[]IA: intrinsic alignment
-%     \item[]LIMD: linear in matter density
-%     \item[]SC gauge: synchronous-comoving gauge
-%     \item[]SPT: standard perturbation theory
-% \end{itemize}
-
-% \section*{Symbols Used}
-% \small
-% \begin{itemize}
-%     \item[]$a$: scale factor
-%     \item[]$z,\ \bar z,\ \tilde z$: redshift (background, observed)
-%     \item[]$\eta$: conformal time
-%     \item[]$\mathcal H$: conformal Hubble parameter ($\mathcal H=aH$)
-%     \item[]$\Omega_m$: matter density parameter
-%     \item[]$D(z)$: linear growth factor,\quad $f \equiv \d\ln D/\d\ln a$
-%     \item[]$\mathbf x,\ \mathbf q$: Eulerian, Lagrangian position
-%     \item[]$\mathbf v,\ \theta$: peculiar velocity, velocity divergence ($\theta=\partial_i v^i$)
-%     \item[]$s^i$: Lagrangian displacement
-%     \item[]$\chi,\ \tilde\chi$: comoving radial distance (true, observed)
-%     \item[]$\hat{\mathbf n}$: line-of-sight unit vector
-%     \item[]$P^{ij}$: sky projector ($P^{ij}=\delta^{ij}-\hat n^i\hat n^j$)
-%     \item[]$\partial_\parallel,\ \partial_{\perp i}$: derivatives along / transverse to $\hat{\mathbf n}$
-%     \item[]$\Phi$: Newtonian gravitational potential
-%     \item[]$\delta_m$: matter density contrast
-%     \item[]$\delta_g,\ \delta_h$: galaxy, halo density contrast
-%     \item[]$K_{ij}$: tidal tensor $K_{ij}\equiv \partial_i\partial_j\nabla^{-2}\delta_m-\tfrac13\delta_{ij}\delta_m$
-%     \item[]$\Pi^{[n]}_{ij}$: convective-time-derivative operator hierarchy (EFT basis)
-%     \item[]$b_{\mathcal O}$: bias / IA coefficients for operator $\mathcal O$
-%     \item[]$\Rstar$: non-locality scale (higher-derivative suppression scale)
-%     \item[]$Q_{ij}$: 3D shape (symmetric, trace-free) tensor of a galaxy
-%     \item[]$\gamma_{ij}$: projected (spin-2) shear on the sky
-%     \item[]$\gamma^{I}_{ij}$: intrinsic shear (IA) contribution
-%     \item[]$\kappa$: lensing convergence,\quad $\hat \kappa$ for observed estimator
-%     \item[]$\Delta x^\mu$: mapping between true and observed source position
-%     \item[]$\delta z$: perturbation to observed redshift
-%     \item[]$n_g,\ \bar n_g,\ \tilde n_g$: proper, background, observed galaxy number density
-%     \item[]$\epsilon,\ \epsilon_{ij}$: IA stochastic (scalar / tensor) noise fields
-%     \item[]$\varepsilon_{\mu\nu\rho\sigma}$: Levi-Civita tensor
-%     \item[]$\langle\cdots\rangle$: ensemble average; prime (${}'$) means Dirac delta removed
-%     \item[]$\deltaD$: Dirac delta function
-%     \item[]$P^{(m)}_{\ell\ell'}(k)$: helicity power spectra of spin-2 components
-%   \end{itemize}
-%  \normalsize
-  
-
-\section{Introduction and Motivation}
+\chapter{Introduction and Motivation}
 TODO
 
+\chapter{Bias, Effective Field Theory (EFT), Intrinsic Alignment}
 \section{Halo Bias and EFT}
 In this section we introduce the much more established field of galaxy bias and an EFT of galaxy bias. This will directly translate to the EFT used in section \ref{sec:galaxyintrinsicalignment}. We consider a $\Lambda$CDM universe with a perturbed FLRW metric unless stated otherwise.
 
@@ -503,15 +459,194 @@ Now what is the significance of these corrections? If you take the fourier trans
 \end{equation}
 The effect corresponds to a $f_{NL}$ of order $1$. These corrections are thus only relevant for extremely large volume surveys, such as Euclid.
 
-\section{Galaxy shape $B$-modes, theoretical model}
+\chapter{Modelling Galaxy B-modes}
+\section{Point Spread Function (PSF) Effects}
+\subsection{Introduction}
+The PSF describes how points are smeared out due to telescope optics, atmospheric effects, etc. It is modeled as a convolution of the true image. It is typically measured by measuring the shapes of stars. They should appear perfectly spherical (they are located in the Milky Way so haven't been appreciably lensed), meaning that any ellipticity can be attributed to the PSF. The PSF changes over time (e.g. due to changes in the internal temperature of the telescope) and over position in the capture image (typically there is more distortion near the edge of an image). See figure \ref{fig:PSF_space_variability}.
+\begin{figure}[h]
+	\center
+	\includegraphics[width=0.5\textwidth]{model.pdf}
+	\caption{A visualization of the spatial variation of the PSF ellipticity across the image field, shown as a grid of small vectors indicating the magnitude and orientation of distortions at different pixel positions. Taken from \cite{2004MNRAS.347.1337H}.}
+	\label{fig:PSF_space_variability}
+\end{figure}
 
-\subsection{$B$-modes due to intrinsic alignment}
+Therefore, one typically measures the ellipticity of many stars during each exposure and creates a space-variable PSF through some interpolation scheme of the deduced PSF from each star, see e.g. \cite{2004MNRAS.347.1337H} for a discussion.
+
+\subsection{Change in ellipticity due to PSF}
+A derivation of how to actually calculate the change in ellipticity, $\delta e$, due to arbitrary (but reasonably weak) PSF was first given in ref. \cite{1995ApJ...449..460K}. Some errors were then corrected in ref. \cite{1998ApJ...504..636H}. We start with a weighted quadrupole,
+\begin{equation}
+	Q_{ij}\equiv\int \d^2\theta\;W(\theta)\theta_i\theta_j f(\vec \theta).
+\end{equation}
+Here $f(\vec \theta)$ is the flux of the image, $W(\theta)$ is a window function, and we work in coordinates such that the dipole vanishes (center of mass coordinates). The PSF is separated into a spherically symmetric part and small but purely anisotropic part. Consider the polarization of an image, $e_\alpha$ given by
+\begin{equation}
+	e_1\equiv\frac{Q_{11}-Q_{22}}{T}, \quad e_2\equiv\frac{2Q_{12}}{T}, \quad T\equiv Q_{11}+Q_{22}. \label{eq:e_alpha_def}
+\end{equation}
+These are invariant to the spherically symmetric part (TODO: check if this is actually true) and so we focus only on the anisotropic part. $f$ is changed due to the PSF as
+\begin{equation}
+	f^{\PSF}(\vec\theta)=(PSF \ast f)(\vec\theta)=\int\d^2\theta'\PSF(\vec\theta')f(\vec \theta-\vec\theta').
+\end{equation}
+Plugging this into the quadrupole and Taylor expanding gives
+\begin{equation}
+	\delta Q_{ij}=q_{lm}Z_{lmij},
+\end{equation}
+where 
+\begin{align}
+	q_{lm}&\equiv\int d^2\theta\theta_l\theta_m\PSF(\vec\theta),\\
+	Z_{lmij}&\equiv\int\d^2\theta W(\theta)\theta_i\theta_j\partial_l\partial_j f(\vec \theta)=\int \d^2\theta f(\vec \theta)z_{lmij},\\
+	z_{lmij}&\equiv\frac{\partial\sbr{W(\theta)\theta_i\theta_j}}{\partial_l\partial_m},
+\end{align}
+where the last line is due to integration by parts. The next step would be to calculate $\delta e_\alpha$, which can ultimately be written as a function of $\delta Q_{ij}$. In the literature a different basis is used, however. Consider that due to the PSF being purely anisotropic $q_{ij}$ must be traceless. Define $p_\alpha$ such that
+\begin{equation}
+	\begin{bmatrix}
+		q_{11} & q_{12} \\ q_{21} & q_{22}
+	\end{bmatrix}
+	=
+	\frac{1}{2}
+	\begin{bmatrix}
+		p_1 & p_2 \\ p_2 & -p_1
+	\end{bmatrix}.
+\end{equation}
+Then one can relate $\delta e_\alpha$ to $p_\alpha$ through
+\begin{align}
+\delta e_\alpha&=P^{\PSF}_{\alpha \beta} p_\beta, \\
+P^{\PSF}_{\alpha \beta}&\equiv X^{\PSF}_{\alpha \beta} - e_\alpha e^{\PSF}_\beta, \\
+X^{\PSF}_{\alpha \beta}&\equiv\frac{1}{T}\int d^2\theta
+\left[\begin{array}{cc}
+W+2W' \theta^2 + W''(\theta_1^2-\theta_2^2)^2 & 2W''(\theta_1^2-\theta_2^2)
+\theta_1\theta_2, \\
+2W''(\theta_1^2-\theta_2^2)\theta_1\theta_2 & W+2W' \theta^2 + 4W''\theta_1^2
+\theta_2^2,  \\
+\end{array}\right]f(\vec\theta), \\
+e^{\PSF}_\alpha&\equiv\frac{1}{I_{11}+I_{22}}\int d^2\theta ,
+\end{align}
+where prime denotes differentiation with respect to $\theta^2$. Again, all that was done here is relating $\delta e_\alpha$ to $\delta Q_{ij}$ and writing out terms explicitly, simply expressed in a different basis.
+
+If the anisotropic part of the PSF is too large compared to the accuracy desired for a survey, one instead has to work non-perturbatively. See reference \cite{2000ApJ...537..555K}.
+
+\subsection{Effects of imperfect PSF compensation}
+Clearly the PSF will never be perfectly compensated for. Ref. \cite{2008A&A...484...67P} breaks this down into 3 causes:
+\begin{enumerate}
+	\item \textbf{The PSF model:} the model chosen to describe the PSF will never perfectly describe it.
+	\item \textbf{The interpolation scheme:} no interpolation scheme will exactly describe the PSF as a function of $\vec \theta$.
+	\item \textbf{The finite information available from each star:} a star provides an image of the PSF that is noisy (photon noise TODO: what is photon noise) and pixelated.
+\end{enumerate}
+Still working to first order and now assuming an \textit{unweighted} quadrupole definition ($W(\theta)=1$), the error can be written as multiplicative and additive shear bias. The propagation from PSF error to shear bias can be derived in a few steps. First, work with the estimator
+	\begin{equation}
+		\hat \gamma=\br{P^\gamma}^{-1} e_\alpha, \quad P^\gamma\equiv 2-\langle |\varepsilon_\gal|^2\rangle. \label{eq:shearestimator}
+	\end{equation}
+	This estimator works because if one expands the flux function inside the quadrupole definition one can find that, at linear order,
+	\begin{equation}
+		\delta Q_{ij} = G_{ik}Q_{kj}+Q_{ik}G_{kj}, \quad G\equiv\begin{bmatrix}
+			\gamma_1 &\gamma_2 \\ \gamma_2 & -\gamma_1
+		\end{bmatrix}.
+	\end{equation}
+	Thus $\delta e_\alpha$ can also be found. Expanding equations \ref{eq:e_alpha_def} gives
+	\begin{align}
+		\delta \varepsilon_\alpha = 2\gamma_\alpha - 2\varepsilon_\alpha\varepsilon_\beta\gamma_\beta.
+	\end{align}
+	Averaging both sides and noting that $2\langle \varepsilon_\alpha\varepsilon_\beta \rangle = \delta_{\alpha\beta}\langle |\varepsilon|^2\rangle$ gives equation \ref{eq:shearestimator}.
+	
+	Second, notice that, in the absence of a window function, the quadrupole of a convolution is the sum of the quadrupoles\footnote{
+	Assume that $f$ and $g$ are normalized and have vanishing dipole:
+	\begin{align*}
+	\int d^2\theta \, f = \int d^2\theta \, g = 1,
+	\qquad
+	\int d^2\theta \, \theta_i f = \int d^2\theta \, \theta_i g = 0.
+	\end{align*}
+	Then
+	\begin{align*}
+	Q_{em}[f * g]
+	&= \int d^2\theta \, \theta_e \theta_m \, (f * g)(\boldsymbol{\theta}) \\
+	&= \int d^2\theta \, \theta_e \theta_m \int d^2\theta' \, g(\boldsymbol{\theta}') \, f(\boldsymbol{\theta} - \boldsymbol{\theta}') \\
+	&= \int d^2\theta \, d^2\theta' \, 
+	(\theta_e - \theta'_e + \theta'_e)(\theta_m - \theta'_m + \theta'_m)
+	\, g(\boldsymbol{\theta}') \, f(\boldsymbol{\theta} - \boldsymbol{\theta}') \\
+	&= \int d^2\theta \, d^2\theta' \,
+	(\theta_e - \theta'_e)(\theta_m - \theta'_m)
+	\, g(\boldsymbol{\theta}') \, f(\boldsymbol{\theta} - \boldsymbol{\theta}')
+	+ \text{(other terms)} \\
+	&= Q_{em}[f] + Q_{em}[g] \, .
+	\end{align*}
+	}, i.e.
+	\begin{equation}
+		Q_{ij}[f\ast g]=Q_{ij}[f]+Q_{ij}[g], \quad (\text{if }W(\theta)=1).
+	\end{equation}
+	Combining with equations \ref{eq:e_alpha_def} gives the (lensed) galaxy ellipticity in terms of the PSF ellipticity and observed ellipticity as
+	\begin{equation}
+		\varepsilon_\gal = \frac{\varepsilon_\obs T_\obs-\varepsilon_\PSF T_\PSF}{T_\obs-T_\PSF}.
+	\end{equation}
+	Now consider that we have some error in our estimates of $\varepsilon_\PSF$ and $T_\PSF$, denote them as $\delta\varepsilon_\PSF$ and $\delta T_\PSF$. We can then expand $\varepsilon_\gal$ in terms of these quantities to obtain
+	\begin{equation}
+		\delta\varepsilon_\gal = (\varepsilon_\gal - \varepsilon_\PSF)\frac{\delta T_\PSF}{T_\gal} - \frac{T_\PSF}{T_\gal}\delta\varepsilon_\PSF.
+	\end{equation}
+	Combining this with the estimator, eq. \ref{eq:shearestimator}, and averaging over a sample of galaxies located in a small enough patch of the sky such that the PSF doesn't change significantly inside of it, gives multiplicative and additive biases
+	\begin{align}
+		m_\PSF(\vec\theta) &= \frac{\delta T_\PSF(\vec\theta)}{T_\PSF(\vec\theta)},\\
+		c_\PSF(\vec\theta) &= -\langle T_\gal^{-1} \rangle \br{P^{\gamma}}^{-1}\sbr{\varepsilon_\PSF\delta T_\PSF+T_\PSF\delta\varepsilon_\PSF}.
+	\end{align}
+
+TODO: relation to $B$-modes? Check if there is some work on this.
+
+TODO: make biases and resulting spectra a general section, because now both masking and PSF errors are expressed as biases
+ 
+\section{Masking / window function effects}
+\subsection{Modification to shear}
+Given a set of observed galaxies, the shear field is given by
+\begin{equation}
+	\gamma(\hat n)=\sum_{g\in\text{ observed gals}} e_g \delta(\hat n - \hat n_g),
+\end{equation}
+here $e_g$ is the ellipticity of the galaxy. Now assume the most general version of masking, which is a window function $W(\hat n)$, i.e. at $\hat n$ only a fraction $W(\hat n)$ of the surveyed galaxies are taken into account\footnote{Or, alternatively, they are weighed by a factor $W(\hat n)$.} The observed shear is then
+\begin{equation}
+	\gamma^{\text{obs}}(\hat n) = W(\hat n)\gamma(\hat n).
+\end{equation}
+In spherical harmonic space this gives
+\begin{align}
+	\gamma_{\ell m}^{\text{obs}} &= \int \d^2\Omega \; _2Y_{\ell m}^*(\hat n)W(\hat n)\gamma(\hat n)\\
+	&= \int \d^2\Omega \; _2Y_{\ell m}^*(\hat n)W(\hat n)\br{\sum_{\ell' m'} \;_2Y_{\ell'm'}(\hat n)\gamma_{\ell'm'}}\\
+	&= \sum_{\ell' m'} \br{\int \d^2\Omega \; _2Y_{\ell m}^*(\hat n)W(\hat n)_2Y_{\ell'm'}(\hat n)} \gamma_{\ell'm'}. \label{eq:windowedshearfunc}
+\end{align}
+
+I.e. just a matrix multiplication of the true multipole moments. $_nY_{\ell m}$ is the spin $n$ spherical harmonic.
+\subsection{Effects from uncertainty in the window function}
+In theory one could simply solve the system of equations shown in equation \ref{eq:windowedshearfunc}. In practice the window function is not perfectly known, %TODO: maybe explain why? I don't really get why it can't be perfectly known
+ leading to bias in estimated shear. This is discussed in reference \cite{2019OJAp....2E...5K}, among others. The reasoning proceeds as follows. Assume multiplicative and additive bias to the shear, i.e.
+ \begin{equation}
+ 	\gamma^{\text{obs}}(\hat n)=\sbr{1+m(\hat n)}\gamma(\hat n) + c(\hat n).
+ \end{equation}
+ A spherical harmonic transform as done to obtain equation \ref{eq:windowedshearfunc} gives
+ \begin{align}
+ 	\gamma^{E,\text{obs}}_{\ell m} &= \gamma^E_{\ell m} + \sum_{\ell'm'}\sbr{\gamma^E_{\ell'm'}W^+_{\ell\ell' m m'} + \gamma^B_{\ell' m'}W^-_{\ell\ell' m m'}} + c^E_{\ell m}, \\
+ 	\gamma^{B,\text{obs}}_{\ell m} &= \gamma^B_{\ell m} + \sum_{\ell'm'}\sbr{\gamma^B_{\ell'm'}W^+_{\ell\ell' m m'} - \gamma^E_{\ell' m'}W^-_{\ell\ell' m m'}} + c^B_{\ell m}. 
+ \end{align}
+ Here
+ \begin{align}
+ 	W^+_{\ell\ell'mm'} &\equiv \frac{1}{2}\sbr{_2W_{\ell\ell'mm'} + \;_{-2}W^*_{\ell\ell'mm'}}, \\
+  	W^+_{\ell\ell'mm'} &\equiv \frac{i}{2}\sbr{_2W_{\ell\ell'mm'} - \;_{-2}W^*_{\ell\ell'mm'}},
+ \end{align}
+ and
+ \begin{equation}
+ 	_sW_{\ell\ell'mm'}\equiv\int \d^2\Omega \;_sY^*_{\ell'm'}(\hat n)m(\hat n)\,_sY_{\ell m}(\hat n).
+ \end{equation}
+ It is immediately clear that there is mixing between $E$ and $B$ modes, in particular, $B$ modes will be observed even if they are not present in the true shear field.
+ The next question is how the power spectra are changed. We work with the usual definition
+ \begin{equation}
+ 	C^{XY, \text{obs}}_{\ell} = \frac{1}{2\ell+1}\sum_m \gamma^{X,\text{obs}}_{\ell m} \gamma^{Y,\text{obs}}_{\ell m}, \quad X,Y\in\{E,B\},
+ \end{equation}
+and assume $C^{EB}_\ell = 0$. This gives a lengthy set of equations, see equation 7 of \cite{2019OJAp....2E...5K}\footnote{They also include a constant multiplicative bias term, $m_0$. I.e. $\gamma^{\text{obs}}(\hat n)=\sbr{1+m_0+m(\hat n)}\gamma(\hat n) + c(\hat n)$. Clearly our explanation is still completely general, as $m_0$ could always be absorbed into $m(\hat n)$.}. If we assume the bias terms are small and work to linear order in them, then the equations simplify considerably.
+\begin{align}
+	C^{EE,\text{obs}}_\ell &=(1+2\langle \text{Re}\sbr{m(\hat n)}\rangle)C^{EE}_\ell + 2C^{c_EE}_\ell, \\ 
+	C^{EB,\text{obs}}_\ell &=-\langle \text{Im}\sbr{m(\hat n)}\rangle)C^{EE}_\ell + \langle \text{Re}\sbr{m(\hat n)}\rangle)C^{BB}_\ell+ 2C^{c_EB}_\ell, \\
+	C^{BB,\text{obs}}_\ell &=(1+2\langle \text{Re}\sbr{m(\hat n)}\rangle)C^{EE}_\ell + 2C^{c_BB}_\ell.
+\end{align}
+Here $C^{c_XY}_\ell$ is just the power spectrum with $c^X_{\ell m}$ moments instead of $\gamma^X_{\ell m}$.
+
+\section{$B$-modes due to intrinsic alignment}
 
 
-\subsection{Lensing corrections (post-Born)}
+\section{Lensing corrections (post-Born)}
 
 
-\subsection{$B$-modes due to galaxy clustering}
+\section{$B$-modes due to galaxy clustering}
 From \cite{Schneider_2002}. In the presence of a galaxy correlation function $\delta_{\mathrm D}(z_1-z_2)g(z_1;\theta_1)$ ($\theta = |\vec\theta_1-\vec\theta_2|$) we get a modified source redshift distribution of pairs of galaxies at redshifts $z_1$ and $z_2$, i.e.
 \begin{equation*}
     p(z_1, z_2;\theta) = \frac{p(w_1;\theta)p(w_2;\theta)[1+\delta_{\mathrm D}(w_1-w_2)g(w_1;\theta)]}{1+\omega(\theta)},
@@ -555,7 +690,7 @@ One then obtains (eq 60 from \cite{Schneider_2002})
     P_B(\ell)=\frac{1}{2}\int\mathrm d \theta\;\theta \int \mathrm d \ell' \; \ell' \mathcal P(\ell'; \theta)[J_0(\ell\theta)J_0(\ell'\theta)\pm J_4(\ell\theta)J_4(\ell'\theta)].
 \end{equation*}
 
-\subsection{$B$-modes due to flux / size cutoffs and lensing}
+\section{$B$-modes due to flux / size cutoffs and lensing}
 (TODO: Check \cite{Bartelmann_2001}, also check Schmidt et al. 2008; Hui et al. 2007 as cited in \cite{Krause_2010} for effects on bispectrum/3-point.) Galaxies are selected based on brightness and size cutoffs. This leads to magnification bias and size bias. This gives B-mode correction. See eq. 60 of \cite{Krause_2010}. On scales $\ell>50$ lensing bias effectively increases the B-mode power spectrum by approximately a factor $(1 + 2q)$, where $q$ is determined by the slope of the luminosity and radius distribution functions of the galaxy sample.
 
 If we work with a flux and size cutoff and define \cite{Schmidt_2009}
@@ -567,7 +702,7 @@ If we work with a flux and size cutoff and define \cite{Schmidt_2009}
 \end{equation*}
 The measured reduced shear $g_{\text{obs}}$ is given in terms of the actual reduced shear $g$, through $g_{\text{obs}}=g(1+\delta_{\text{lens}})$. This corrected value is then correlated to obtain B-modes.
 
-\section{Calibration and Validation with Simulations}
+\chapter{Calibration and Validation with Simulations}
 TODO here:
 \begin{enumerate}
     \item Explain validity of EFT of IA based on \cite{bakx2023effectivefieldtheoryintrinsic}
@@ -579,8 +714,8 @@ TODO here:
 
 \appendix
 
-\section{Simulating/modelling nonlinear structure formation and baryonic feedback with HMCODE}
-\subsection{The halo model}
+\chapter{Simulating/modeling nonlinear structure formation and baryonic feedback with HMCODE}
+\section{The halo model}
 In order to accurately model the matter power spectrum at nonlinear scales, the halo model has been proposed since the early 2000's (TODO: ESSENTIAL REFERENCES HERE). One assumes that all matter is located in exactly one halo. First rewrite the matter density field in the dimensionless quantity $\Delta^2$:
 \begin{equation}
     \Delta^2(k) = 4\pi V\br{\frac{k}{2
@@ -626,7 +761,7 @@ $f$ then has a nearly universal which was first derived in \cite{1974ApJ...187..
 \end{equation}
 It is accurate up to about 20 percent for a wide range of cosmologies.
 
-\subsection{Baryonic feedback}
+\section{Baryonic feedback}
 Baryonic feedback refers to effects unique to baryons due to their collisional and warm nature. Important effects include cooling, supernova explosions, and active galactic nuclei (AGN). (TODO: ADD BASIC REFS)
 \begin{enumerate}
     \item Baryonic matter has inelastic collisions. Kinetic energy is lost and converted mainly into heat, which is then converted into radiative energy. This causes baryonic matter to clump up more than CDM, in turn leading to the creation of macroscopic structures such as stars and planets, as well as to denser halo cores than expected from a CDM only universe.
@@ -638,7 +773,7 @@ Constraints from the Dark Energy Survey could be strongly biased if the most ext
 
 
 
-\subsection{Optimizing the halo model and taking into account baryonic feedback}
+\section{Optimizing the halo model and taking into account baryonic feedback}
 The halo model has been significantly improved upon by adding degrees of freedom and fitting to simulations in \cite{Mead_2016} and later with improved accuracy in \cite{Mead_2021}. In particular, they take into account BAO damping, massive neutrinos and baryonic feedback. The key changes made are:
 \begin{enumerate}
     \item For the 2 halo term, they use ``de-wiggled'' linear theory. The BAO ``wiggles'' are isolated from the rest of the power spectrum signal,

@@ -1,26 +1,21 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{jonasstyle}[2026/04/03 Clean modern LaTeX style]
+\ProvidesPackage{jonasstyle}[2026/04/15 Clean modern LaTeX style for pdfLaTeX]
 
 % --------------------------------------------------
-% Engine check (require XeLaTeX or LuaLaTeX)
+% Font encoding and input
 % --------------------------------------------------
-\RequirePackage{iftex}
-\ifPDFTeX
-  \PackageError{jonasstyle}{Use XeLaTeX or LuaLaTeX for this style}{}
-\fi
+\RequirePackage[T1]{fontenc}
+\RequirePackage[utf8]{inputenc}
 
 % --------------------------------------------------
-% Modern fonts
+% Modern-ish sans serif font for text
 % --------------------------------------------------
-\RequirePackage{fontspec}
-\setmainfont{Source Sans Pro}[
-  Ligatures=TeX,
-  Scale=1.0
-]
+\RequirePackage[default]{sourcesanspro}
 
-% Math font (clean + readable)
-\RequirePackage{unicode-math}
-\setmathfont{TeX Gyre Termes Math}
+% --------------------------------------------------
+% Math font
+% --------------------------------------------------
+\RequirePackage{newtxmath}
 
 % --------------------------------------------------
 % Page layout (smaller margins)
@@ -48,26 +43,44 @@
 % --------------------------------------------------
 % Section titles
 % --------------------------------------------------
-\RequirePackage{titlesec}
+\RequirePackage[explicit]{titlesec}
+\RequirePackage[normalem]{ulem}
+
+% Roman numerals for chapters
+\renewcommand{\thechapter}{\Roman{chapter}}
+
+% Chapter formatting:
+% - no "Chapter" word
+% - no horizontal line
+% - Roman numeral + title on one line
+% - slightly smaller than default
+% - underlined title
+\titleformat{\chapter}[hang]
+  {\LARGE\bfseries}
+  {\thechapter}
+  {0.75em}
+  {\LARGE\bfseries\uline{#1}}
+
+\titlespacing*{\chapter}{0pt}{0pt}{1.2em}
 
 \titleformat{\section}
   {\Large\bfseries}
-  {\thesection}{0.75em}{}
+  {\thesection}{0.75em}{#1}
 
 \titleformat{\subsection}
   {\large\bfseries}
-  {\thesubsection}{0.6em}{}
+  {\thesubsection}{0.6em}{#1}
 
 \titleformat{\subsubsection}
   {\normalsize\bfseries}
-  {\thesubsubsection}{0.5em}{}
+  {\thesubsubsection}{0.5em}{#1}
 
 \titlespacing*{\section}{0pt}{1.4em}{0.6em}
 \titlespacing*{\subsection}{0pt}{1.0em}{0.4em}
 \titlespacing*{\subsubsection}{0pt}{0.8em}{0.3em}
 
 % --------------------------------------------------
-% Title styling (bold, clean)
+% Title styling
 % --------------------------------------------------
 \RequirePackage{titling}
 
@@ -117,3 +130,13 @@
 % Slightly improved line spacing
 % --------------------------------------------------
 \linespread{1.03}
+
+% --------------------------------------------------
+% Make sans-serif the default document font
+% --------------------------------------------------
+\renewcommand{\familydefault}{\sfdefault}
+
+% --------------------------------------------------
+% Prevent blank pages before chapters in two-sided layouts
+% --------------------------------------------------
+\let\cleardoublepage\clearpage
