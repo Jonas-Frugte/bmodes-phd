@@ -241,7 +241,7 @@ We get
 \begin{align}
     (Y_2^{(0)})(\hat{\mathbf k})_{ij} &= \sqrt{3/2}(\hat{\mathbf k}_i\hat{\mathbf k}_j - \frac{1}{3}\delta_{ij})\\
     (Y_2^{(\pm 1)})(\hat{\mathbf k})_{ij} &= \sqrt{1/2}(\hat{\mathbf k}_i\mathbf e_j^\pm + \hat{\mathbf k}_j\mathbf e_i^\pm)\\
-    (Y_2^{(\pm 1)})(\hat{\mathbf k})_{ij} &= \mathbf e_i^\pm \mathbf e_j^\pm
+    (Y_2^{(\pm 2)})(\hat{\mathbf k})_{ij} &= \mathbf e_i^\pm \mathbf e_j^\pm
 \end{align}
 with $e^{\pm}=...$%TODO
 and $i,j=1,2,3$. The unit vectors $e_1$ and $e_2$ are defined by $...$ %TODO
@@ -254,7 +254,7 @@ These spherical tensors have a number of other usefull properties which we will 
 \subsection{Defining Power Spectra}
 We can now define the powerspectrum as a $3 \times 3 \times 3 \times 3$ tensor given by
 \begin{equation}
-    \langle Q_{ij}(\mathbf k)Q_{ij}(\mathbf k') = (2 \pi)^3\delta^D(\mathbf k + \mathbf k')P_{ijkl}^{QQ}(\mathbf k).
+    \langle Q_{ij}(\mathbf k)Q_{ij}(\mathbf k') \rangle = (2 \pi)^3\delta^D(\mathbf k + \mathbf k')P_{ijkl}^{QQ}(\mathbf k).
 \end{equation}
 This definition is the most obvious, however because $Q_{ij}$ transforms as a tensor under rotations, it leaves $P_{ijkl}^{QQ}(\mathbf k)$ dependent on the direction of $\mathbf k$. We can instead work with the decomposition of $Q_{ij}$ in the spherical tensors:
 \begin{equation}
@@ -263,7 +263,7 @@ This definition is the most obvious, however because $Q_{ij}$ transforms as a te
 where we now allow $Q_{ij}$ to also have a trace / scalar component $Q_0^0$. % TODO: this transition is a bit abrupt, should make this the case from the start
 We can then define the following powerspectra:
 \begin{equation}
-    \langle S_l^{(m)}(\mathbf k)S_{l'}^{(m')}(\mathbf k')\rangle = (2\pi)^3\delta_{mm'}\delta^D(\mathbf k + \mathbf k')P^{(m)}_{ll'}(k).
+    \langle Q_l^{(m)}(\mathbf k)Q_{l'}^{(m')}(\mathbf k')\rangle = (2\pi)^3\delta_{mm'}\delta^D(\mathbf k + \mathbf k')P^{(m)}_{ll'}(k).
 \end{equation}
 When the powerspectra are defined in this way, they are scalars. There are 7 independent spectra, however we also have by the properties of the spherical tensors that
 \begin{equation}
@@ -371,7 +371,7 @@ then project it to the sky using eq. ... . One can show (see section 2.6 of \cit
     P_{EE}(k, \mu) &= \frac{3}{8}(1-\mu^2)^2P_{22}^{(0)}(k) + \frac{1}{2}\mu^2(1-\mu^2)P_{22}^{(1)}(k)+\frac{1}{8}(1+\mu^2)^2P_{22}^{(2)}(k), \\
     P_{BB}(k, \mu) &= \frac{1}{2}(1-\mu^2)P_{22}^{(1)}(k)+\frac{1}{2}\mu^2P_{22}^{(2)}(k).
 \end{align}
-Here $\mu = \hat{\mathbf n} \cdot \hat{\mathbf n}$ is the cosine of the angle between $\hat{\mathbf n}$ and $\hat{\mathbf k}$ and $\delta$ is the usual fractional matter density perturbation.
+Here $\mu = \hat{\mathbf n} \cdot \hat{\mathbf k}$ is the cosine of the angle between $\hat{\mathbf n}$ and $\hat{\mathbf k}$ and $\delta$ is the usual fractional matter density perturbation.
 
 At leading order in the bias expansion (and ignoring stochastic contributions) the $B$-mode power spectrum vanishes. This is also the case for the LA and NLA models \cite{bakx2023effectivefieldtheoryintrinsic}. We thus require an EFT taken to atleast 2nd order to model $B$-modes of galaxy IA. As usual, the $EB$ correlator vanishes due to invariance under parity transformations. Parity breaking primordial graviational waves would in general cause a nonzero $EB$ correlator. This would thus serve as a smoking gun for parity violating models of inflation \cite{Biagetti_2020}.
 
@@ -402,7 +402,7 @@ We also define $\delta z$ through the inferred emission scale factor $\tilde a =
 \begin{equation}
     \frac{a(x^0)}{\tilde a} = 1+\delta z \implies \bar z - \tilde z = -(1+\tilde z)\delta z.
 \end{equation}
-In other words, $\delta z$ is the the difference between the observed redshift and the redshift $\bar z$ that would be observed in an unperturbed universe.
+In other words, $\delta z$ is the difference between the observed redshift and the redshift $\bar z$ that would be observed in an unperturbed universe.
 
 For the rest of the section, we work in the SC gauge (what is the significance of this? should I say more about it?)
 
@@ -527,7 +527,7 @@ If the anisotropic part of the PSF is too large compared to the accuracy desired
 Clearly the PSF will never be perfectly compensated for. Ref. \cite{2008A&A...484...67P} breaks this down into 3 causes:
 \begin{enumerate}
 	\item \textbf{The PSF model:} the model chosen to describe the PSF will never perfectly describe it.
-	\item \textbf{The interpolation scheme:} no interpolation scheme will exactly describe the PSF as a function of $\vec \theta$.
+	\item \textbf{The interpolation scheme:} no interpolation scheme will exactly describe the PSF as a function of $\vec \theta$. It should be noted that for EUCLID in particular interpolation will no longer be relevant \cite{2020A&A...635A.139E} . EUCLID's PSF is diffraction limited. The PSF thus depends of the spectral energy density (SED) of the galaxy imaged. A physical model of the telescope optics is required to calculate the PSF as a function of SED (and many other parameters). 
 	\item \textbf{The finite information available from each star:} a star provides an image of the PSF that is noisy (photon noise TODO: what is photon noise) and pixelated.
 \end{enumerate}
 Still working to first order and now assuming an \textit{unweighted} quadrupole definition ($W(\theta)=1$), the error can be written as multiplicative and additive shear bias. The propagation from PSF error to shear bias can be derived in a few steps. First, work with the estimator
@@ -644,7 +644,97 @@ Here $C^{c_XY}_\ell$ is just the power spectrum with $c^X_{\ell m}$ moments inst
 
 
 \section{Lensing corrections (post-Born)}
+\subsection{Leading-order formulas}
+\label{sec:leading_order}
 
+Following \cite{Krause_2010}, we work in the flat-sky approximation with the sky in the $xy$-plane and photons propagating along $-\hat{\mathbf{z}}$. We set $c=1$ so that the Newtonian potential $\Phi$ is dimensionless. Lower-case Roman indices $a,b,\ldots \in \{1,2\}$ label Cartesian components; capital Roman indices $I,J,\ldots \in \{1,2\}$ label polar (shear/ellipticity) components; Greek indices label tomographic redshift slices.
+
+To first order in $\Phi$, the photon geodesic is integrated along the unperturbed ray (the Born approximation). The Jacobian of the resulting mapping defines the distortion tensor $\psi_{ij} \equiv \delta_{ij} - \partial n_i/\partial n_{0j}$, which encodes convergence, shear, and rotation via $\kappa = \tfrac{1}{2}(\psi_{11}+\psi_{22})$, $\gamma_1 = \tfrac{1}{2}(\psi_{11}-\psi_{22})$, $\gamma_2 = \tfrac{1}{2}(\psi_{12}+\psi_{21})$, and $\omega = \tfrac{1}{2}(\psi_{12}-\psi_{21})$.
+
+Introducing the angular Fourier transform of the potential \cite{2005PhRvD..72h3001D},
+\begin{equation}
+    \tilde{\phi}(\mathbf{l};\chi) \equiv \frac{1}{\chi^2}\int\frac{\d k_3}{2\pi}\,\tilde{\Phi}(\mathbf{l}/\chi,k_3;z(\chi))\,e^{ik_3\chi},
+\end{equation}
+the first-order convergence and shear read
+\begin{equation}
+    \tilde{\kappa}^{(1)}(\mathbf{l},z_s) = -l^2\int_0^{\chi_s}\!\d\chi\, W(\chi,\chi_s)\,\tilde{\phi}(\mathbf{l};\chi),\qquad \tilde{\gamma}_I^{(1)}(\mathbf{l},z_s) = T_I(\mathbf{l})\,\tilde{\kappa}^{(1)}(\mathbf{l},z_s),
+\end{equation}
+with lensing kernel $W(\chi',\chi) = (1/\chi' - 1/\chi)\,\Theta(\chi-\chi')$, source distance $\chi_s = \chi(z_s)$, and $T_1(\mathbf{l}) = \cos(2\varphi_\mathbf{l})$, $T_2(\mathbf{l}) = \sin(2\varphi_\mathbf{l})$. The E/B decomposition
+\begin{equation}
+    \tilde{\gamma}_E(\mathbf{l},z_s) = \delta_{IJ}T_I(\mathbf{l})\,\tilde{\gamma}_J(\mathbf{l},z_s),\qquad \tilde{\gamma}_B(\mathbf{l},z_s) = \epsilon_{IJ}T_I(\mathbf{l})\,\tilde{\gamma}_J(\mathbf{l},z_s)
+\end{equation}
+yields the leading-order identities $\tilde{\gamma}_E^{(1)} = \tilde{\kappa}^{(1)}$ and $\tilde{\gamma}_B^{(1)} = \tilde{\omega}^{(1)} = 0$: linear lensing is curl-free and produces no B-mode power.
+
+Under the Limber approximation \cite{1992ApJ...388..272K}, the leading tomographic cross-spectra for $z_\alpha \le z_\beta$ take the standard form
+\begin{equation}
+    C^{(11)}_{\tilde{\gamma}_E}(l;z_\alpha,z_\beta) = C^{(11)}_{\tilde{\kappa}}(l;z_\alpha,z_\beta) = l^4\int_0^{\chi_\alpha}\!\d\chi\,\frac{W(\chi,\chi_\alpha)W(\chi,\chi_\beta)}{\chi^2}\,P_\Phi(l/\chi;z(\chi)),
+\end{equation}
+with $C^{(11)}_{\tilde{\gamma}_B} = C^{(11)}_{\tilde{\omega}} = 0$. The superscript $(11)$ denotes two first-order fields, i.e.\ the $\mathcal{O}(\Phi^2)$ contribution.
+
+The observable is the mean galaxy ellipticity, which estimates the reduced shear $g_I \equiv \gamma_I/(1-\kappa)$,
+\begin{equation}
+    \langle e_I\rangle = C\,\frac{\gamma_I}{1-\kappa},
+    \label{eq:ellipticity_reduced_shear}
+\end{equation}
+where $C$ depends on the ellipticity estimator and source population \cite{1995A&A...294..411S,1997A&A...318..687S}. In the limit $\kappa, |\gamma| \ll 1$ this reduces to $\gamma_I$, and ellipticity two-point statistics reduce to the shear power spectrum above. The corrections discussed in the remainder of this chapter enter at $\mathcal{O}(\Phi^3)$ or higher and spoil these clean identities --- in particular, they source a non-vanishing galaxy B-mode.
+
+\subsection{Higher order corrections}
+Going back to the perturbed FLRW metric, a photon will of course follow its null geodesic equation,
+\begin{equation}
+	\frac{\d }{\d\chi}\br{\frac{\d\vec n}{\chi}\chi}=-2\frac{\partial \Phi(\vec x(\vec n, \chi);z(\chi))}{\partial\vec n}\chi. \label{eq:photon_geodesic}
+\end{equation}
+The leading order equations take $\vec x(\vec n, \chi) \approx\vec x^{(1)}(\vec n, \chi)=\vec n_0 \chi$. We can define the deflection angle $\vec d \equiv \vec n - \vec n_0$ and enforce the appropriate initial conditions ($\vec n(\chi=0)=\vec n_0$ and $\partial_\chi \vec n(\chi = 0)=0$). Then Taylor expand the potential in equation \ref{eq:photon_geodesic} in terms of the deflection angle and around the unperturbed path, i.e.
+\begin{equation}
+	\Phi(\vec x(\vec n, \chi);z(\chi)) = \Phi(\vec n_0\chi;z(\chi))+\Phi_{,a}(\vec n_0\chi;z(\chi)) d_a(\chi) + \frac{1}{2}\Phi_{,ab}(\vec n_0\chi;z(\chi))d_a(\chi)d_b(\chi) +\cdots.
+\end{equation}
+Higher order corrections are then obtained by iteratively solving order by order in $\vec d(\chi)$. For ``next to leading order'' corrections to the power spectra one needs to work to 3rd order in $\vec d$. The corrections consist of ``$(22)$'' and ``$(13)$'' power spectra. Naively, one would expect the next to leading order term to be of the type $(12)$, however under the Limber approximation this vanishes. What then follows is working out all terms, Fourier transforming, separating into $E$ and $B$ modes, creating the power spectra, and applying the Limber approximation. The steps are straightforward but require a lot of algebra. They are displayed in \cite{Krause_2010}, the final result is presented in their tables 1 and 2. 
+\begin{table*}[t]
+\tiny
+\centering
+\caption{$\mathcal{O}(\Phi^4)$ contributions to the reduced shear B-mode power spectrum, reproduced from \cite{Krause_2010}. All power spectra carry redshift indices $z_\alpha, z_\beta$. The auxiliary quantities $M$, $W$, $T_\kappa$, and the angles $\varphi_{\mathbf{l}}$ are defined in the text.}
+\label{tab:B_mode_corrections}
+\renewcommand{\arraystretch}{1.8}
+\begin{tabular}{p{0.3\textwidth} p{0.7\textwidth}}
+\hline\hline
+Term & Contribution to $C_{\tilde{g}_B}(l)$ \\
+\hline
+$\left\langle \tilde{\gamma}_B^{(2)}(\vec{l}, z_\alpha)\, \tilde{\gamma}_B^{(2)}(\vec{l}'', z_\beta) \right\rangle$
+& $\displaystyle 4 l^2 \int \frac{\d^2 \vec{l}'}{(2\pi)^2} \left( l' \sin \varphi_{\vec{l}'} \right)^2 \left[ \vec{l}' \cdot (\vec{l} - \vec{l}') \right]^2 M\!\left( l', |\vec{l} - \vec{l}'|; z_\alpha, z_\beta \right)$ \\
+
+$\left\langle \tilde{\gamma}_B^{(2)}(\vec{l}, z_\alpha) \left( \tilde{\gamma}^{(1)} * \tilde{\kappa}^{(1)} \right)_B (\vec{l}'', z_\beta) \right\rangle$
+& $\displaystyle -2 \int \frac{\d^2 \vec{l}'}{(2\pi)^2} \left[ \vec{l}' \cdot (\vec{l} - \vec{l}') \right] |\vec{l} - \vec{l}'|^2 \, l\, l'^3 \sin \varphi_{\vec{l}'} \left\{ \sin(2\varphi_{\vec{l}'}) + \sin(2\varphi_{\vec{l} - \vec{l}'}) \right\}$
+\newline
+$\displaystyle \times \int_0^{\chi_\beta} \!\d\chi\, \frac{W(\chi, \chi_\alpha)\, W(\chi, \chi_\beta)}{\chi^2} \int_0^{\chi} \!\d\chi'\, \frac{W(\chi', \chi_\beta)\, W(\chi', \chi)}{\chi'^2} P_\Phi(l'/\chi; z(\chi))\, P_\Phi(|\vec{l} - \vec{l}'|/\chi'; z(\chi'))$ \\
+
+$\left\langle \left( \tilde{\gamma}^{(1)} * \tilde{\kappa}^{(1)} \right)_B (\vec{l}, z_\alpha) \left( \tilde{\gamma}^{(1)} * \tilde{\kappa}^{(1)} \right)_B (\vec{l}'', z_\beta) \right\rangle$
+& $\displaystyle \int \frac{\d^2 \vec{l}'}{(2\pi)^2} \sin(2\varphi_{\vec{l}'}) \Big\{ \left[ \sin(2\varphi_{\vec{l}'}) + \sin(2\varphi_{\vec{l}' - \vec{l}}) \right] C^{(11)}_{\tilde{\gamma}_E}(l'; z_\alpha, z_\beta)\, C^{(11)}_{\tilde{\gamma}_E}(|\vec{l}' - \vec{l}|; z_\alpha, z_\beta)$
+\newline
+
+$\displaystyle + \int \frac{\d^2 \vec{l}'''}{(2\pi)^2} \sin(2\varphi_{\vec{l}'''})\, T_\kappa(\vec{l}', \vec{l} - \vec{l}', \vec{l}''', -\vec{l} - \vec{l}'''; z_\alpha, z_\alpha, z_\beta, z_\beta) \Big\}$ \\
+\hline
+\end{tabular}
+\end{table*}
+The quantities appearing in Table~\ref{tab:B_mode_corrections} are defined as follows. The lensing kernel is
+\begin{equation}
+    W(\chi', \chi) = \left( \frac{1}{\chi'} - \frac{1}{\chi} \right) \Theta(\chi - \chi'),
+\end{equation}
+with $\Theta$ the Heaviside step function and $\chi_\alpha \equiv \chi(z_\alpha)$ the comoving distance to source slice $\alpha$. Azimuthal angles of 2D Fourier modes are denoted $\varphi_{\mathbf{l}}$, so that $\mathbf{l} = l(\cos\varphi_{\mathbf{l}}, \sin\varphi_{\mathbf{l}})$; all results are written in the convention $\mathbf{l} \parallel \hat{\mathbf{x}}$, which is permissible since the power spectra depend only on $l = |\mathbf{l}|$.
+
+The mode-coupling integral $M$ encodes the lens-lens coupling characteristic of multiple-deflection corrections,
+\begin{equation}
+    M(l, l'; z_\alpha, z_\beta) = \int_0^{\chi_\alpha} \!\d\chi\, \frac{W(\chi, \chi_\alpha)\, W(\chi, \chi_\beta)}{\chi^2} \int_0^{\chi} \!\d\chi'\, \frac{W^2(\chi', \chi)}{\chi'^2}\, P_\Phi(l/\chi; z(\chi))\, P_\Phi(l'/\chi'; z(\chi')).
+\end{equation}
+
+The tomographic convergence trispectrum $T_\kappa$ is the Limber projection of the 3D matter-density trispectrum,
+\begin{align*}
+    T_\kappa(\mathbf{l}_1, \mathbf{l}_2, \mathbf{l}_3, -\mathbf{l}_{123}; z_\alpha, z_\beta, z_\gamma, z_\delta) &= \left( \frac{3}{2} \Omega_m H_0^2 \right)^4 \int \!\d\chi\, \frac{W(\chi, \chi_\alpha)\, W(\chi, \chi_\beta)\, W(\chi, \chi_\gamma)\, W(\chi, \chi_\delta)}{\chi^6} \\\ 
+    &\times\left(1 + z(\chi)\right)^4 T(\mathbf{l}_1/\chi, \mathbf{l}_2/\chi, \mathbf{l}_3/\chi, -\mathbf{l}_{123}/\chi; z(\chi)),
+\end{align*}
+where $\mathbf{l}_{123} \equiv \mathbf{l}_1 + \mathbf{l}_2 + \mathbf{l}_3$ and the 3D matter trispectrum $T(\mathbf{k}_1, \mathbf{k}_2, \mathbf{k}_3, \mathbf{k}_4)$ is the connected part of the four-point function,
+\begin{equation}
+    \left\langle \tilde{\delta}(\mathbf{k}_1)\, \tilde{\delta}(\mathbf{k}_2)\, \tilde{\delta}(\mathbf{k}_3)\, \tilde{\delta}(\mathbf{k}_4) \right\rangle_c = (2\pi)^3\, \delta_D(\mathbf{k}_1 + \mathbf{k}_2 + \mathbf{k}_3 + \mathbf{k}_4)\, T(\mathbf{k}_1, \mathbf{k}_2, \mathbf{k}_3, \mathbf{k}_4).
+\end{equation}
+\cite{Krause_2010} evaluate $T_\kappa$ using the halo-model prescription of \cite{2001ApJ...554...56C}, which splits the trispectrum into one-, two-, three-, and four-halo contributions. On the angular scales relevant for Stage-IV surveys the Gaussian (disconnected) piece dominates, and in the halo-model framework the connected contribution to the B-mode spectrum is further suppressed by the angular projection factors relative to the E-mode.
 
 \section{$B$-modes due to galaxy clustering}
 From \cite{Schneider_2002}. In the presence of a galaxy correlation function $\delta_{\mathrm D}(z_1-z_2)g(z_1;\theta_1)$ ($\theta = |\vec\theta_1-\vec\theta_2|$) we get a modified source redshift distribution of pairs of galaxies at redshifts $z_1$ and $z_2$, i.e.
@@ -701,6 +791,8 @@ If we work with a flux and size cutoff and define \cite{Schmidt_2009}
     1+\delta_{\text{lens}} = \frac{1+q\kappa^2 + C_1\kappa^2+C_2|\gamma|^2}{1+C_1\langle \kappa^2\rangle + C_2\langle |\gamma|^2\rangle}.
 \end{equation*}
 The measured reduced shear $g_{\text{obs}}$ is given in terms of the actual reduced shear $g$, through $g_{\text{obs}}=g(1+\delta_{\text{lens}})$. This corrected value is then correlated to obtain B-modes.
+
+TODO: okay so this is multiplicative bias then? Express in that language.
 
 \chapter{Calibration and Validation with Simulations}
 TODO here:
