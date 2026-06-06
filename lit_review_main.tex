@@ -33,7 +33,7 @@
 
 
 \usepackage[backend=bibtex, sorting=none]{biblatex}
-\addbibresource{sources.bib}
+\addbibresource{sources_updated.bib}
 
 % some custom commands that should've already been in latex by default
 \DeclareRobustCommand{\d}{\ifmmode\text{d}\else d\fi}
@@ -51,6 +51,8 @@
 
 \newcommand{\br}[1]{\ensuremath{\left( #1 \right)}}
 \newcommand{\sbr}[1]{\ensuremath{\left[ #1 \right]}}
+
+\newcommand{\reviewnote}[1]{\textcolor{red}{[\textbf{Review:} #1]}}
 
 \setlength{\cftbeforesecskip}{5pt}
 
@@ -459,10 +461,13 @@ Now what is the significance of these corrections? If you take the fourier trans
 \end{equation}
 The effect corresponds to a $f_{NL}$ of order $1$. These corrections are thus only relevant for extremely large volume surveys, such as Euclid.
 
-\chapter{Modelling Galaxy B-modes}
-\section{Point Spread Function (PSF) Effects}
-\subsection{Introduction}
-The PSF describes how points are smeared out due to telescope optics, atmospheric effects, etc. It is modeled as a convolution of the true image. It is typically measured by measuring the shapes of stars. They should appear perfectly spherical (they are located in the Milky Way so haven't been appreciably lensed), meaning that any ellipticity can be attributed to the PSF. The PSF changes over time (e.g. due to changes in the internal temperature of the telescope) and over position in the capture image (typically there is more distortion near the edge of an image). See figure \ref{fig:PSF_space_variability}.
+\chapter{Point Spread Function Modelling for Weak Gravitational Lensing}
+\label{chap:psf}
+
+Every astronomical image is formed through an optical system that blurs and distorts the incoming light, and this response is described by the point spread function (PSF): the image the system produces for a point source. For an incoherent source the observed intensity is the true sky brightness convolved with the PSF, as derived in Appendix~\ref{app:optics}, so the PSF both broadens galaxy images and stamps its own anisotropy onto their measured shapes. Left uncorrected, it becomes one of the dominant systematic errors in a galaxy shape survey, which makes accurate PSF modeling essential.
+
+The PSF is not known a priori at the position of each galaxy. It is typically estimated by looking at stars, which are effectively point sources. The PSF varies significantly across the field of view (FOV), see figure \ref{fig:PSF_space_variability}. An older method to compensate for this is to simply interpolate the PSF for points in between stars, see for instance \cite{2004MNRAS.347.1337H} for a discussion. More recently, the scientific community has considered spectral and temporal variability as well. This chapter reviews the physical content of the PSF and the way it enters the imaging process, the individual contributors that shape it, and the methods used to validate a PSF model. The presentation follows the review of \cite{liaudat2023review}, and the optical background underlying the convolution description is collected in Appendix~\ref{app:optics}.
+
 \begin{figure}[h]
 	\center
 	\includegraphics[width=0.5\textwidth]{model.pdf}
@@ -470,9 +475,109 @@ The PSF describes how points are smeared out due to telescope optics, atmospheri
 	\label{fig:PSF_space_variability}
 \end{figure}
 
-Therefore, one typically measures the ellipticity of many stars during each exposure and creates a space-variable PSF through some interpolation scheme of the deduced PSF from each star, see e.g. \cite{2004MNRAS.347.1337H} for a discussion.
+\reviewnote{A section on current PSF models (parametric and data-driven families) is to be added here.}
 
-\subsection{Change in ellipticity due to PSF}
+\section{The observational model}
+\label{sec:obsmodel}
+
+Three kinds of variation matter. Spatial variation arises because the path taken by light through the optics depends on the field angle, so the PSF changes with position in the focal plane; this is strongest for wide-field instruments. It is also spatially varying due to the atmosphere being non-uniform in the case of ground based surveys. Spectral variation follows from the wavelength dependence of diffraction (Appendix~\ref{app:optics}) and from chromatic effects in the optics and detector (see section \ref{sec:contributors}). Temporal variation reflects the changing state of the instrument, for example thermal expansion in orbit or, for ground-based telescopes, the evolving atmosphere.
+
+Let $I_{\mathrm{GT}}$ denote the ground-truth intensity of the object of interest (GT for ground truth) and $H_{\mathrm{int}}$ the PSF, written as a function of focal-plane position $(u,v)$, wavelength $\lambda$, time $t$, and the object centroid $(u_i,v_i)$. The observed pixelised image is
+\begin{equation}
+I_{\mathrm{img}}(\bar u,\bar v;t\mid u_i,v_i)
+= F_p\!\left[\int_0^{\infty} T(\lambda)\,(I_{\mathrm{GT}}\star H_{\mathrm{int}})(u,v;\lambda;t\mid u_i,v_i)\,\mathrm{d}\lambda\right]
+\circ N(\bar u,\bar v;t\mid u_i,v_i),
+\label{eq:obsmodel}
+\end{equation}
+where $\star$ is convolution, $(\bar u,\bar v)$ are the discrete pixel coordinates, $F_p$ is the degradation operator that samples the continuous image onto the detector grid, and $\circ$ combines the result with the noise term $N$. The function $T(\lambda)$ is the total system transmission. It collects the wavelength-dependent throughput of the mirrors and optics, the transmission of the filter that defines the passband, and the quantum efficiency (QE) of the detector, that is the probability that an incident photon of a given wavelength is converted into a measured photo-electron. The integral over $\lambda$ is needed because $H_{\mathrm{int}}$ depends on wavelength, so a broadband image is a transmission-weighted superposition of monochromatic images, each blurred by its own PSF.
+
+In practice the continuous quantities are inaccessible and the model is discretized. Assuming additive noise and approximating the spectral integral by a sum over $n_\lambda$ bins of width $\Delta\lambda_k$ centred at $\lambda_k$,
+\begin{equation}
+I_{\mathrm{img}}(\bar u,\bar v;t\mid u_i,v_i)
+= F_p\!\left\{\sum_{k=1}^{n_\lambda} T(\lambda_k)\,(I_{\mathrm{GT}}\star H)(\bar u,\bar v;\lambda_k;t\mid u_i,v_i)\,\Delta\lambda_k\right\}
++ N(\bar u,\bar v;t\mid u_i,v_i).
+\label{eq:obsmodel_discrete}
+\end{equation}
+
+A star is a special case. To good approximation it is a spatial point source with a spectral energy distribution (SED) $f_{(u_i,v_i)}(\lambda)$, so $I_{\mathrm{star}} = \delta(u_i,v_i)\,f_{(u_i,v_i)}(\lambda)$. Substituting this into the model leaves a degraded, noisy sample of the PSF field weighted by the stellar SED. Stars are therefore the data that constrain the PSF model, although their SEDs are usually known only at the low spectral resolution provided by photometric bands.
+
+\section{Contributors to the PSF / PSF model accuracy}
+\label{sec:contributors}
+
+The shape of the PSF is set by a long list of physical effects, conventionally split into those that act at the level of the optics, which modify the amplitude and phase of the wavefront, and those that act at the detector, which affect the recorded intensity. A third contribution, the atmosphere, dominates ground-based imaging but is absent for a space telescope such as \textit{Euclid}. We will not consider it in this review.
+
+\subsection{General contributors}
+See also ref. \cite{2008A&A...484...67P}.
+\begin{itemize}
+	\item \textit{The PSF model} the model chosen to describe the PSF will never perfectly describe it.
+	\item \textit{The interpolation scheme} no interpolation scheme will exactly describe the PSF as a function of $\vec \theta$. It should be noted that for EUCLID in particular interpolation will no longer be relevant \cite{2020A&A...635A.139E} . EUCLID's PSF is diffraction limited. The PSF thus depends of the spectral energy density (SED) of the galaxy imaged. A physical model of the telescope optics is required to calculate the PSF as a function of SED (and many other parameters). 
+	\item \textit{The finite information available from each star} a star provides an image of the PSF that is noisy (photon noise TODO: what is photon noise) and pixelated.
+\end{itemize}
+
+\subsection{Optic-level contributors}
+
+For a diffraction limited PSF the most basic contribution is due to finite aperture/lens width. For an unobscured circular aperture of diameter $d$ the PSF is the Airy pattern, whose full width at half maximum (FWHM) is
+\begin{equation}
+\theta_{\mathrm{FWHM}} = 1.025\,\frac{\lambda}{d},
+\label{eq:airy}
+\end{equation}
+with the first dark ring, the Rayleigh resolution limit, at $1.22\,\lambda/d$. The aperture diameter therefore sets the resolution: a larger aperture gives a narrower PSF.
+
+Real optics depart from the ideal in several ways:
+\begin{itemize}
+\item \textit{Aberrations.} Imperfect surfaces or alignment cause the wavefront to deviate from the ideal converging sphere. These deviations are encoded in the wavefront error (WFE), introduced through the generalised pupil function in Appendix~\ref{app:optics}, and are usually expanded in Zernike polynomials \cite{noll1976}, which are similar to spherical harmonics but for a disk instead of a sphere.
+\item \textit{Surface and polishing errors.} Residual roughness of mirrors and lenses left by manufacturing adds high-spatial-frequency structure to the WFE.
+\item \textit{Obscurations.} Internal structure of the telescope can obscure some of the incoming light, modifying the PSF. For Euclid in particular: the secondary mirror and its support structure block part of the pupil and produce characteristic diffraction features, including the spikes seen around bright stars. Because the obscuration is the two-dimensional projection of a three-dimensional structure, its appearance, and hence its imprint on the PSF, depends on the field position. \reviewnote{The strut spikes carry a preferred orientation, so the residual PSF anisotropy they leave can in principle project onto B-modes. Consider linking this to the B-mode discussion elsewhere in the thesis.}
+\item \textit{Stray and scattered light.} Light that reaches the detector by unintended paths adds a diffuse component, affecting mostly the faint outer wings of the PSF. TODO: get this a bit clearer.
+\item \textit{Contamination.} In the vacuum of outer space materials release trapped / absorbed gasses, this is called molecular outgassing. This can lead to the forming of ice films on optical elements if they are sufficiently cold. This was significant for Gaia and has been studied for Euclid.
+\item \textit{Chromatic components.} Elements such as dichroic filters, built from stacks of thin coatings, introduce wavelength-dependent phase and amplitude changes beyond the intrinsic chromaticity of diffraction, even with excellent production quality.
+\item \textit{Polarisation.} The scalar treatment of Appendix~\ref{app:optics} neglects polarisation. In reality the optics can partially polarise unpolarised light, and astrophysical foregrounds such as Galactic dust polarize light; both modify the effective PSF and can contribute to WL systematics.
+\item \textit{Thermal variation.} Temperature gradients flex the structure and shift the focus, an effect sometimes called breathing. It is more pronounced for space telescopes, although those at the L2 Lagrange point, including \textit{Euclid}, are more stable than telescopes in low Earth orbit.
+\end{itemize}
+
+\subsection{Detector-level contributors}
+
+The continuous intensity arriving at the focal plane is sampled by discrete pixels, each integrating the light over its area. Two consequences of this pixellation matter for PSF modelling. First, the continuous image is generally not centred on the pixel grid, so different exposures differ by sub-pixel shifts; comparing a model with an observed star then requires matching their centroids, since otherwise a correct model can still leave a large residual. Second, the sampling may not satisfy the Nyquist--Shannon theorem, which states that a band-limited signal must be sampled at least twice per period of its highest frequency to be reconstructed exactly. For a diffraction limited PSF the relevant scale is set by the highest spatial frequency passed by the aperture, of order $\lambda f/d$ for focal length $f$. \textit{Euclid} is undersampled, so its individual exposures cannot resolve the full PSF. A super-resolution step is required, and a dithering strategy of small sub-pixel pointing offsets between exposures is used to recover well-sampled information.
+
+Further detector effects include:
+\begin{itemize}
+\item \textit{Optical throughput and CCD QE.} The combined transmission of the optics and filter and the quantum efficiency of the light detectors, i.e. charge-coupled device (CCD), set the total response $T(\lambda)$ in Eq.~\eqref{eq:obsmodel}.
+\item \textit{CCD misalignments.} CCDs that do not lie exactly in the focal plane introduce small, chip-dependent defocus.
+\item \textit{Guiding errors.} Residual pointing motion (jitter) of the telescope blurs the image and can be modelled as an additional convolution.
+\item \textit{Charge transfer inefficiency (CTI).} Radiation damage accumulated in space creates ``traps'' in the electronics of the telescope that delay electrons during readout. Leads to trailing bright sources along the transfer direction.
+\item \textit{Brighter-fatter effect (BFE).} Charge already collected in a pixel builds a transverse electric field that deflects later-arriving charge, so bright sources appear broader than faint ones and the response is not linear in flux.
+\item \textit{Wavelength-dependent sub-pixel response.} Charge diffuses between neighbouring pixels by an amount that depends on wavelength, adding a chromatic blur.
+\end{itemize}
+
+The way exposures are combined also shapes the effective PSF. Coaddition of many exposures raises the signal-to-noise ratio but complicates the PSF, since the combined image has a well-defined PSF only under particular coaddition schemes. Dithering, mentioned above, mitigates undersampling and is especially effective given the stable pointing of a space-based telescope.
+
+\section{Validation of PSF models}
+\label{sec:validation}
+
+Validating a PSF model is difficult because the true PSF field is never directly accessible; only noisy star images are available. The basic safeguard is to split the observed stars into an estimation (training) set and a disjoint test (validation) set, for example in an 80/20 ratio, and to assess the model only on the test set. This measures the model's ability to generalise to positions it was not fit to.
+
+\subsection{Pixel-based metrics}
+
+The most direct check is the residual between a predicted and an observed test star. For noiseless simulated stars the root mean square error (RMSE) of the residual measures the reconstruction error directly. For real data the residual is contaminated by noise, so \cite{liaudat2021mccd} introduced metrics that mask the image to its central region, where most of the flux lies, and estimate the noise from the outer region. The leading metric subtracts the noise variance from the masked residual variance, so that a perfect model leaves only noise. Further metrics quantify the mean and the scatter of the residual modeling error. These metrics are useful but, for obvious reasons, hard to translate into actual scientific impact.
+
+\subsection{Moment-based metrics}
+
+Since WL measures galaxy shapes in terms of second order moments, it is natural to characterize the PSF through the same shape statistics. Using definitions of the second moments with some weight function as described in TODO: what to put here. 
+A standard estimator is the adaptive-moments algorithm of the HSM (Hirata--Seljak--Mandelbaum) method \cite{hirata_seljak2003}. Several diagnostics are built on these quantities. The shape RMSE is the residual of $e$ and $R^2$ between model and observation; it is simple but says little about the structure of the error.
+
+The meanshapes diagnostic maps the spatial distribution of the ellipticity and size residuals across the focal plane, averaged over many exposures, and reveals spatial patterns that the model fails to capture.
+
+An alternative set of diagnostics are the $\rho$-statistics \cite{rowe2010,jarvis2016}, the auto- and cross-correlations of the PSF ellipticity residual $\delta e_{\mathrm{PSF}}$ and the fractional size residual $\delta R^2_{\mathrm{PSF}}/R^2_{\mathrm{PSF}}$ as functions of angular separation $\theta$,
+\begin{align}
+\rho_1(\theta) &= \big\langle \delta e_{\mathrm{PSF}}^{*}(\theta')\,\delta e_{\mathrm{PSF}}(\theta'+\theta)\big\rangle, \label{eq:rho1}\\
+\rho_2(\theta) &= \big\langle e_{\mathrm{PSF}}^{*}(\theta')\,\delta e_{\mathrm{PSF}}(\theta'+\theta)\big\rangle, \\
+\rho_3(\theta) &= \left\langle \left(e_{\mathrm{PSF}}^{*}\tfrac{\delta R^2_{\mathrm{PSF}}}{R^2_{\mathrm{PSF}}}\right)\!(\theta')\,\left(e_{\mathrm{PSF}}\tfrac{\delta R^2_{\mathrm{PSF}}}{R^2_{\mathrm{PSF}}}\right)\!(\theta'+\theta)\right\rangle, \\
+\rho_4(\theta) &= \left\langle \delta e_{\mathrm{PSF}}^{*}(\theta')\,\left(e_{\mathrm{PSF}}\tfrac{\delta R^2_{\mathrm{PSF}}}{R^2_{\mathrm{PSF}}}\right)\!(\theta'+\theta)\right\rangle, \\
+\rho_5(\theta) &= \left\langle e_{\mathrm{PSF}}^{*}(\theta')\,\left(e_{\mathrm{PSF}}\tfrac{\delta R^2_{\mathrm{PSF}}}{R^2_{\mathrm{PSF}}}\right)\!(\theta'+\theta)\right\rangle, \label{eq:rho5}
+\end{align}
+where $*$ denotes complex conjugation and $\langle\cdot\rangle$ averages over galaxy pairs at separation $\theta$. Assuming the ellipticity field is statistically isotropic and homogeneous, these depend only on the modulus $|\theta|$. The $\rho$-statistics identify the angular scales on which PSF modelling errors are largest and can be propagated into the shear two-point correlation function (2PCF) to estimate the induced systematic \cite{jarvis2020}.
+
+\section{Change in ellipticity due to PSF}
 A derivation of how to actually calculate the change in ellipticity, $\delta e$, due to arbitrary (but reasonably weak) PSF was first given in ref. \cite{1995ApJ...449..460K}. Some errors were then corrected in ref. \cite{1998ApJ...504..636H}. We start with a weighted quadrupole,
 \begin{equation}
 	Q_{ij}\equiv\int \d^2\theta\;W(\theta)\theta_i\theta_j f(\vec \theta).
@@ -523,14 +628,12 @@ where prime denotes differentiation with respect to $\theta^2$. Again, all that 
 
 If the anisotropic part of the PSF is too large compared to the accuracy desired for a survey, one instead has to work non-perturbatively. See reference \cite{2000ApJ...537..555K}.
 
-\subsection{Effects of imperfect PSF compensation}
-Clearly the PSF will never be perfectly compensated for. Ref. \cite{2008A&A...484...67P} breaks this down into 3 causes:
-\begin{enumerate}
-	\item \textbf{The PSF model:} the model chosen to describe the PSF will never perfectly describe it.
-	\item \textbf{The interpolation scheme:} no interpolation scheme will exactly describe the PSF as a function of $\vec \theta$. It should be noted that for EUCLID in particular interpolation will no longer be relevant \cite{2020A&A...635A.139E} . EUCLID's PSF is diffraction limited. The PSF thus depends of the spectral energy density (SED) of the galaxy imaged. A physical model of the telescope optics is required to calculate the PSF as a function of SED (and many other parameters). 
-	\item \textbf{The finite information available from each star:} a star provides an image of the PSF that is noisy (photon noise TODO: what is photon noise) and pixelated.
-\end{enumerate}
-Still working to first order and now assuming an \textit{unweighted} quadrupole definition ($W(\theta)=1$), the error can be written as multiplicative and additive shear bias. The propagation from PSF error to shear bias can be derived in a few steps. First, work with the estimator
+%--------------------------------------------------------------
+\section{Error propagation and requirements}
+\label{sec:errorprop}
+%--------------------------------------------------------------
+
+To turn these diagnostics into requirements on a model, the PSF errors must be propagated to a bias of the quantity of interest, the galaxy ellipticity / shear. Still working to first order and now assuming an \textit{unweighted} quadrupole definition ($W(\theta)=1$), the error can be written as multiplicative and additive shear bias. The propagation from PSF error to shear bias can be derived in a few steps. First, work with the estimator
 	\begin{equation}
 		\hat \gamma=\br{P^\gamma}^{-1} e_\alpha, \quad P^\gamma\equiv 2-\langle |\varepsilon_\gal|^2\rangle. \label{eq:shearestimator}
 	\end{equation}
@@ -584,11 +687,25 @@ Still working to first order and now assuming an \textit{unweighted} quadrupole 
 		m_\PSF(\vec\theta) &= \frac{\delta T_\PSF(\vec\theta)}{T_\PSF(\vec\theta)},\\
 		c_\PSF(\vec\theta) &= -\langle T_\gal^{-1} \rangle \br{P^{\gamma}}^{-1}\sbr{\varepsilon_\PSF\delta T_\PSF+T_\PSF\delta\varepsilon_\PSF}.
 	\end{align}
+	These biases can then be propagated to $E$ and $B$ mode biases and ultimately into biases of measured cosmological parameters, see section TODO. This is the basis of the PSF model requirements adopted for \textit{Euclid} \cite{laureijs2011,racca2016}, which demand a root mean square error of order $2\times10^{-4}$ on each PSF ellipticity component and of order $10^{-3}$ on the relative PSF size.
+
+The framework has known limitations. It assumes unweighted moments, whereas real measurements use a weight function, which mixes in higher-order moments so that even in the absence of noise the second-order moments are affected. More significantly, a diffraction-limited PSF, such as \textit{Euclid}'s, has a complex shape that its second-order moments do not describe well. The error in the higher moments of the PSF (the higher moments error, HME) then contributes to the shear bias and is missed by the standard framework. \cite{zhang2021} showed that it can be a significant source of systematics for upcoming surveys. The requirements above should therefore be applied with care for diffraction-limited instruments.
+
+A promising direction is to make the entire forward model differentiable. Automatic differentiation \cite{baydin2017} computes exact derivatives of a model output with respect to its parameters by applying the chain rule through the computation, without deriving gradients by hand. A forward model that is differentiable from the wavefront parameters through to the target estimator would supply the derivatives needed for error propagation directly, and would allow more complex scenarios to be treated than the analytic moment-based expansion permits. This idea underlies recent differentiable optical PSF models \cite{liaudat2023wavediff}.
 
 TODO: relation to $B$-modes? Check if there is some work on this.
 
 TODO: make biases and resulting spectra a general section, because now both masking and PSF errors are expressed as biases
- 
+
+\section{Modern PSF models}
+Relevant for Euclid:
+\begin{itemize}
+	\item Euclid VIS parametric model. Parametric. Official model.
+	\item WaveDiff. Data-driven. Made for Euclid. Handles chromaticity and super resolution. Basically tries to estimate $W$ function from earlier.
+	\item Resolved component analysis. Modern version of interpolation / optimization problem.
+\end{itemize}
+
+\chapter{Modelling Galaxy B-modes}
 \section{Masking / window function effects}
 \subsection{Modification to shear}
 Given a set of observed galaxies, the shear field is given by
@@ -915,6 +1032,191 @@ The halo model has been significantly improved upon by adding degrees of freedom
 \end{enumerate}
 In \cite{Mead_2021} it was observed that when fitting the power spectrum to the BAHAMAS simulations %TODO: add some ref here
 that all 6 baryonic feedback parameters are have a roughly linear relationship to the ``feedback temperature'', $\log_{10}(T_{AGN}/K)$. This is the temperature at which surrounding gas is heated by AGN. This is thus a much simpler model with only slightly less accuracy (couple of percent accuracy compared to $<2.5\%$ accuracy for the 6 parameter model).
+
+\chapter{Scalar Diffraction Theory and Fourier Optics}
+\label{app:optics}
+
+This appendix collects the optical results used in the main text, in particular the convolution description of imaging and the identification of the PSF with the squared modulus of the Fourier transform of the pupil. TODO: what does this mean, idk currently. The treatment is scalar, meaning the electromagnetic field is described by a single complex scalar amplitude rather than its full vector form. This is accurate when the aperture is large compared with the wavelength, so that the polarisation coupling at the edges, which extends only a few wavelengths into the aperture, is negligible. The development follows \cite{goodman2005}; a rigorous account is given by \cite{born_wolf1999}. TODO: check these sources 
+
+%--------------------------------------------------------------
+\section{The Huygens--Fresnel principle}
+%--------------------------------------------------------------
+
+The Huygens--Fresnel principle states that every point of a wavefront acts as a source of secondary spherical wavelets, and that the field at a later point is the superposition of these wavelets, which interfere according to their relative phases. Consider a planar aperture $\Sigma$ in the plane $(x,y)$, illuminated from behind along the positive $z$ axis, and an observation point $\mathbf{p}_1=(u_1,v_1;z)$ in a parallel plane at distance $z$. Writing $\mathbf{p}_0=(x,y;0)$ for a point in the aperture and $r_{01}=\lVert\mathbf{p}_1-\mathbf{p}_0\rVert$ for the distance between them, the diffracted field is
+\begin{equation}
+U(\mathbf{p}_1) = \frac{z}{\mathrm{i}\lambda}\iint_\Sigma U(x,y;0)\,\frac{e^{\mathrm{i}kr_{01}}}{r_{01}^2}\,\mathrm{d}x\,\mathrm{d}y,
+\label{eq:hf}
+\end{equation}
+where $\lambda$ is the wavelength, $k=2\pi/\lambda$ the wavenumber, and $U$ the incident field in the aperture. Each aperture point contributes a spherical wavelet $e^{\mathrm{i}kr_{01}}/r_{01}$, whose phase advances as $kr_{01}$.
+\section{Derivation from the Helmholtz equation}
+\label{sec:rs}
+%--------------------------------------------------------------
+
+A monochromatic field $U(\mathbf{r})e^{-\mathrm{i}\omega t}$ (lightwave with frequency $\omega$) has a spatial part obeying the Helmholtz equation,
+\begin{equation}
+(\nabla^2 + k^2)U = 0.
+\end{equation}
+The field at $\mathbf{p}_1$ is recovered from its values on a surface through Green's second identity, which for two scalar fields $U$ and $G$ reads
+\begin{equation}
+\iiint_V (U\nabla^2 G - G\nabla^2 U)\,\mathrm{d}V = \oiint_S (U\,\partial_n G - G\,\partial_n U)\,\mathrm{d}S,
+\label{eq:green}
+\end{equation}
+with $\partial_n$ the derivative along the outward normal. Choosing $G$ to be the free-space Green's function of the Helmholtz operator, the outgoing spherical wave centred on $\mathbf{p}_1$,
+\begin{equation}
+G(\mathbf{r}) = \frac{e^{\mathrm{i}kr_{01}}}{4\pi r_{01}},
+\qquad
+(\nabla^2+k^2)G(\mathbf r) = -\delta^3(\mathbf{r}-\mathbf{p}_1),
+\end{equation}
+the left-hand side of Eq.~\eqref{eq:green} collapses onto $-U(\mathbf{p}_1)$: the $k^2$ terms cancel and the delta function samples the field. Taking $V$ to be the half-space $z>0$ bounded by the aperture plane and a hemisphere at infinity, and discarding the hemisphere contribution by the Sommerfeld radiation condition, TODO: explain this one is left with a surface integral over the aperture. This is the Kirchhoff result, and it requires both $U$ and $\partial_n U$ on the aperture.
+
+The Rayleigh--Sommerfeld construction removes the need for $\partial_n U$. One subtracts from $G$ a second source at the mirror image $\mathbf{p}_1'$ of $\mathbf{p}_1$ in the aperture plane,
+\begin{equation}
+G_-(\mathbf{r}) = \frac{e^{\mathrm{i}kr_{01}}}{4\pi r_{01}} - \frac{e^{\mathrm{i}kr_{01}'}}{4\pi r_{01}'},
+\end{equation}
+which vanishes on the aperture plane because the two distances are equal there. We proceed by using $G_-$ instead of $G$. The $\partial_n U$ term now drops out, leaving
+\begin{equation}
+U(\mathbf{p}_1) = -\iint_\Sigma U(x,y;0)\,\partial_n G_-\,\mathrm{d}A.
+\end{equation}
+On the aperture the normal derivative of each spherical wave brings down a factor $\cos\theta = z/r_{01}$, where $\theta$ is the angle between the normal and the line from the aperture point to $\mathbf{p}_1$, and the image source doubles the result,
+\begin{equation}
+\partial_n G_-\big|_\Sigma = \frac{1}{2\pi}\left(\mathrm{i}k - \frac{1}{r_{01}}\right)\frac{e^{\mathrm{i}kr_{01}}}{r_{01}}\cos\theta.
+\end{equation}
+For any optical distance far larger than a wavelength, $k\gg 1/r_{01}$, so the $1/r_{01}$ term is negligible against $\mathrm{i}k$. Using $k=2\pi/\lambda$,
+\begin{equation}
+U(\mathbf{p}_1)\approx -\frac{\mathrm{i}k}{2\pi}\iint_\Sigma U\,\frac{e^{\mathrm{i}kr_{01}}}{r_{01}}\cos\theta\,\mathrm{d}A
+= \frac{1}{\mathrm{i}\lambda}\iint_\Sigma U\,\frac{e^{\mathrm{i}kr_{01}}}{r_{01}}\cos\theta\,\mathrm{d}A,
+\end{equation}
+which is Eq.~\eqref{eq:hf} once $\cos\theta = z/r_{01}$ is inserted.
+
+%--------------------------------------------------------------
+\section{Fresnel diffraction}
+%--------------------------------------------------------------
+
+Equation~\eqref{eq:hf} is exact within scalar theory but awkward to evaluate. If $z\gg u_1,v_1,x,y$, i.e. the distance between aperture and the image plans is much larger than the size of the image (that we want to calculate properly) and the size of the aperture itself, than we can expand the distance for an observation point near the axis:
+\begin{equation}
+r_{01} = z\sqrt{1 + \left(\frac{u_1-x}{z}\right)^2 + \left(\frac{v_1-y}{z}\right)^2}
+\approx z\left[1 + \frac{1}{2}\left(\frac{u_1-x}{z}\right)^2 + \frac{1}{2}\left(\frac{v_1-y}{z}\right)^2\right].
+\label{eq:binomial}
+\end{equation}
+Because the phase $kr_{01}$ is far more sensitive to this approximation than the slowly varying $1/r_{01}^2$, the expansion is used in the exponent while the denominator is set to $r_{01}^2\approx z^2$. This gives the Fresnel diffraction integral
+\begin{equation}
+U(u_1,v_1;z) = \frac{e^{\mathrm{i}kz}}{\mathrm{i}\lambda z}\iint_\Sigma U(x,y;0)\,
+\exp\!\left[\mathrm{i}\frac{k}{2z}\big((u_1-x)^2+(v_1-y)^2\big)\right]\mathrm{d}x\,\mathrm{d}y,
+\label{eq:fresnel}
+\end{equation}
+a convolution of the aperture field with a quadratic-phase kernel. 
+
+%--------------------------------------------------------------
+\section{Fraunhofer diffraction}
+%--------------------------------------------------------------
+The amount of diffraction oscillations in the final image can be expressed through the Fresnel number
+\begin{equation}
+N_F = \frac{r^2}{\lambda z},
+\label{eq:fresnelnumber}
+\end{equation}
+with $r$ the aperture radius and $z$ the propagation distance. Alternatively, the Fresnel number can be interpreted as quantifying how quickly varying the exponential in the integrand of equation ... TODO is. For light that doesn't have very large wavelength the Fresnel description applies when $N_F$ is of order unity. For $N_F\ll 1$ the field has reached the far field and the simpler Fraunhofer form below applies, derived below. $N_F\gg 1$ corresponds to the near field, where light can be treated as rays and diffraction can be ignored.
+
+Now looking at $N_F \ll 1$, i.e. far field limit, the quadratic phase in $(x,y)$ across the aperture is negligible, as $x$ and $y$ will only run from 0 to $r$. We thus set that factor to unity. The Fresnel integral then reduces to
+\begin{equation}
+U(u_1,v_1;z) = \frac{e^{\mathrm{i}kz}}{\mathrm{i}\lambda z}\exp\!\left[\mathrm{i}\frac{k}{2z}(u_1^2+v_1^2)\right]
+\iint_\Sigma U(x,y;0)\,\exp\!\left[-\mathrm{i}\frac{2\pi}{\lambda z}(u_1 x + v_1 y)\right]\mathrm{d}x\,\mathrm{d}y,
+\label{eq:fraunhofer}
+\end{equation}
+which, up to prefactors, is the two-dimensional Fourier transform of the aperture field evaluated at the spatial frequencies $(u_1/\lambda z,\,v_1/\lambda z)$. The recorded intensity, the squared modulus, is
+\begin{equation}
+I(u_1,v_1;z) = \frac{1}{\lambda^2 z^2}\left|\mathcal{F}\{\iota_\Sigma U\}\!\left(\frac{u_1}{\lambda z},\frac{v_1}{\lambda z}\right)\right|^2,
+\end{equation}
+where $\iota_\Sigma$ is the indicator function of the aperture. This Fourier relationship between aperture and far-field intensity is the origin of the statement that the PSF is the transform of the pupil.
+
+%--------------------------------------------------------------
+\section{Diffraction by a thin lens}
+%--------------------------------------------------------------
+
+A thin lens acts as a pure phase transformation: it leaves the amplitude unchanged and adds a position-dependent phase set by the extra optical path through the glass, which is largest at the centre and smallest at the edge of a converging lens. For a lens of focal length $f$ this phase is quadratic,
+\begin{equation}
+U_{l'}(x,y) = U_l(x,y)\,P(x,y)\,\exp\!\left[-\mathrm{i}\frac{k}{2f}(x^2+y^2)\right],
+\label{eq:lens}
+\end{equation}
+where $U_l$ is the incident field, $U_{l'}$ the field just after the lens, and $P(x,y)$ the pupil function, equal to one inside the physical aperture and zero outside. The focal length follows from the geometry through the lensmaker relation $f = R/(n-1)$ for a surface of radius of curvature $R$ and refractive index $n$. The quadratic phase is exactly the paraxial form of a spherical wave converging to a point at distance $f$, so an incident plane wave emerges as a converging wave focused at the focal point. In this picture refraction is not a separate effect: the local ray direction is the gradient of the phase, so the imposed phase already bends the rays toward the focus.
+
+For a point source at the object plane a distance $z_o$ before the lens, the field reaching the lens is, in the Fresnel approximation, a diverging spherical wave
+\begin{equation}
+U_l(x,y) = \frac{1}{\mathrm{i}\lambda z_o}\exp\!\left[\mathrm{i}\frac{k}{2z_o}\big((x-\xi)^2+(y-\eta)^2\big)\right],
+\end{equation}
+for a source at object-plane coordinates $(\xi,\eta)$. Next we propagate $U_{l'}$ from the lens to the image plane with the Fresnel integral. We assume that the image plane is placed such that
+\begin{equation}
+	\frac{1}{z_o}+\frac{1}{z_i}-\frac{1}{f} = 0
+\end{equation} 
+	and apply some further approximations. We thus get
+\begin{equation}
+H(u,v;\tilde\xi,\tilde\eta)\approx \frac{1}{\lambda^2 z_o f}\iint P(x,y)\,
+\exp\!\left[-\mathrm{i}\frac{2\pi}{\lambda f}\big((u-\tilde\xi)x + (v-\tilde\eta)y\big)\right]\mathrm{d}x\,\mathrm{d}y.
+\label{eq:lensimpulse}
+\end{equation}
+Note that this looks like Fraunhofer diffraction without actually requiring the Fresnel number to be small. Here $m=-f/z_o$ is the magnification and $(\tilde\xi,\tilde\eta)=(m\xi,m\eta)$ are the reduced (magnified) object coordinates, in which the impulse response depends only on the separation between the image and source positions. For an astronomical source the object distance is effectively infinite, so the lens law $1/z_o + 1/z_i = 1/f$ places the image at $z_i = f$, that is at the focal plane.
+
+%--------------------------------------------------------------
+\section{General optical systems}
+%--------------------------------------------------------------
+
+A real telescope contains several mirrors or lenses, but its action can be summarised without tracking each element. Between the entrance and exit pupils the light travels distances vastly larger than the wavelength, so $N_F\gg 1$ and diffraction is negligible. The propagation is well described by geometrical optics. In that regime each element acts linearly on the ray coordinates, its transverse position and angle, and the whole system is equivalent to a single affine transformation. We assume spherical symmetry of the telescope, meaning the only allowed transformation is this magnification.
+
+Concretely, in the geometrical optics regime a ray is specified by its transverse position $x$ and angle $\theta$, and propagation through an element is the linear map
+\begin{equation}
+\begin{pmatrix} x' \\ \theta' \end{pmatrix}
+= \begin{pmatrix} A & B \\ C & D \end{pmatrix}
+\begin{pmatrix} x \\ \theta \end{pmatrix},
+\label{eq:abcd}
+\end{equation}
+the ray-transfer or ABCD matrix. Free propagation over a distance $L$ has $B=L$ with $A=D=1$ and $C=0$; a thin lens has $C=-1/f$ with $A=D=1$ and $B=0$, which follows directly from the phase of Eq.~\eqref{eq:lens} by identifying the ray angle with the transverse phase gradient, $\theta = k^{-1}\partial_x\phi$. Composing the matrices of all elements gives a single linear map, confirming the affine description.
+
+After light passes through the various optical elements, it gets focused on a detector. At this step the light collapses to a small area and diffraction needs to be taken into account. We can use the Fresnel approximation here and thus also equation TODO. 
+
+We thus effectively just have light that passed through some lens with focus $f$ (this is equivalent to the internal system of actual lenses and apertures). Now define
+\begin{equation}
+U_g(\tilde\xi,\tilde\eta) = \frac{1}{|m|}\,U_{\mathrm{obj}}\!\left(\frac{\tilde\xi}{m},\frac{\tilde\eta}{m}\right),
+\label{eq:idealimage}
+\end{equation}
+than we find that 
+the image field is $U_{\mathrm{img}} = U_g\star H$, with the impulse response
+\begin{equation}
+H(u-\tilde\xi,v-\tilde\eta) = \frac{a}{\lambda f}\iint P(x,y)\,
+\exp\!\left[-\mathrm{i}\frac{2\pi}{\lambda f}\big((u-\tilde\xi)x+(v-\tilde\eta)y\big)\right]\mathrm{d}x\,\mathrm{d}y,
+\label{eq:generalimpulse}
+\end{equation}
+where $a$ is a constant amplitude. The key point here is the convolution.
+
+%--------------------------------------------------------------
+\section{Aberrations and the generalised pupil function}
+%--------------------------------------------------------------
+
+The discussion so far assumes ideal optics. Aberrations are deviations of the wavefront from the ideal converging sphere, equivalently leads and lags in the optical path. They are incorporated by promoting the pupil function to the generalised pupil function
+\begin{equation}
+P_{\mathrm{gen}}(x,y) = P(x,y)\,\exp\!\left[\mathrm{i}\frac{2\pi}{\lambda}W(x,y)\right],
+\label{eq:genpupil}
+\end{equation}
+where $W$ is the wavefront error (WFE), also called the optical path difference (OPD), between the aberrated and the ideal wavefront. The WFE is commonly expanded in Zernike polynomials \cite{noll1976}, which are orthogonal on the unit disk and so well suited to circular apertures. For a wide-field instrument both $W$ and $P$ depend on the field position, which is what makes the impulse response vary across the focal plane.
+
+%--------------------------------------------------------------
+\section{Coherence and the point spread function}
+%--------------------------------------------------------------
+
+Whether the imaging equation is linear in the field or in the intensity depends on the coherence of the illumination. A detector records the time-averaged intensity over an integration time $T$ far longer than the optical period. The correlation between two points of the ideal image is the mutual intensity $J_g(\tilde\xi_1,\tilde\eta_1;\tilde\xi_2,\tilde\eta_2) = \langle U_g(\tilde\xi_1,\tilde\eta_1;t)\,U_g^{*}(\tilde\xi_2,\tilde\eta_2;t)\rangle$. For coherent illumination, in which the phases at different points are perfectly correlated as in a laser, the mutual intensity factorises and the system is linear in the field amplitude,
+\begin{equation}
+I_{\mathrm{img}}^{\mathrm{coh}} = |U_g\star H|^2.
+\end{equation}
+For incoherent illumination, in which the phases are uncorrelated, the mutual intensity reduces to a delta function and the system is linear in intensity,
+\begin{equation}
+I_{\mathrm{img}}^{\mathrm{inc}} = \kappa\,(I_g\star |H|^2) = \kappa\,(I_g\star H_{\mathrm{int}}),
+\end{equation}
+with $\kappa$ a constant and $I_g=|U_g|^2$. Astronomical sources such as stars and galaxies are incoherent, so this is the relevant case, and the intensity PSF is $H_{\mathrm{int}} = |H|^2$. Combining this with the impulse response and the generalised pupil function gives the central result used in the main text: the PSF is the squared modulus of the Fourier transform of the generalised pupil,
+\begin{equation}
+H_{\mathrm{int}}(u,v) = \frac{|a|^2}{\lambda^2 f^2}
+\left|\iint P(x,y)\,\exp\!\left[\mathrm{i}\frac{2\pi}{\lambda}W(x,y)\right]
+\exp\!\left[-\mathrm{i}\frac{2\pi}{\lambda f}(ux+vy)\right]\mathrm{d}x\,\mathrm{d}y\right|^2.
+\label{eq:psf}
+\end{equation}
+The amplitude of the PSF is fixed by the aperture and its WFE, and its width by the ratio $\lambda/d$. This is the quantity that, convolved with the true sky, produces the observed image in Eq.~\eqref{eq:obsmodel}.
 
 
 
